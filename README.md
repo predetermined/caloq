@@ -8,9 +8,13 @@
 <a href="https://play.google.com/store/apps/details?id=li.l5d.caloq">Downloadable on the Google Play Store</a>
 </p>
 
+## Disclaimer
+
+This project is currently only targeting Android since I originally had no plan of publishing it and only built it for myself.
+
 ## Development
 
-Info: This project uses [Expo](https://expo.dev/) and is only targeting Android devices.
+This project uses [Expo](https://expo.dev/).
 
 1. Clone the repo
 2. `npm install`
