@@ -1,0 +1,38 @@
+{
+  "expo": {
+    "name": "caloq",
+    "owner": "l5d",
+    "slug": "caloq",
+    "version": "1.0.8",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "caloq",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/icon.png",
+        "backgroundColor": "#DC2626"
+      },
+      "package": "li.l5d.caloq",
+      "permissions": [],
+      "versionCode": 108
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f0ffe394-3e8b-4e92-a560-c2b1fd585c3f"
+      }
+    }
+  }
+}
