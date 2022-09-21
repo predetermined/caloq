@@ -1,7 +1,7 @@
 # caloq, the calorie tracking app
 
 <p align="center">
-  <img width="200" src="./assets/images/icon.png" />
+  <img width="200" src="logo.png" />
 </p>
 
 <p align="center">
