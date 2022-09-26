@@ -232,7 +232,7 @@ export function HomeScreen(_props: RootTabScreenProps<"Home">) {
                   ...(!addManually ? styles.activeTabText : {}),
                 }}
               >
-                By volume
+                By weight
               </StyledText>
             </Pressable>
 
