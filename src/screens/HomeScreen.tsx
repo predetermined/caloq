@@ -17,7 +17,7 @@ import {
   sharedColors,
   sharedStyles,
 } from "../constants/layout";
-import { RootTabScreenProps } from "../types";
+import { RootTabScreenProps } from "../../types";
 import { AppContext, IAppContext } from "../contexts/appContext";
 import { HistoryEntry } from "../components/HistoryEntry";
 import { StyledTextInput } from "../components/StyledTextInput";
@@ -232,7 +232,7 @@ export function HomeScreen(_props: RootTabScreenProps<"Home">) {
                   ...(!addManually ? styles.activeTabText : {}),
                 }}
               >
-                By volume
+                By weight
               </StyledText>
             </Pressable>
 

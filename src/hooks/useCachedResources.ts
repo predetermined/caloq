@@ -15,7 +15,7 @@ export default function useCachedResources() {
         // Load fonts
         await Font.loadAsync({
           ...Ionicons.font,
-          "Azeret-Mono": require("../assets/fonts/AzeretMono-Regular.ttf"),
+          "Azeret-Mono": require("../../assets/fonts/AzeretMono-Regular.ttf"),
         });
       } catch (e) {
         // We might want to provide this error information to an error reporting service

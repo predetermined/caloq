@@ -1,6 +1,6 @@
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "react-native";
-
+import { registerRootComponent } from "expo";
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import { Navigation } from "./navigation/Navigation";
@@ -10,7 +10,7 @@ import { useMeals } from "./hooks/useMeals";
 import { useNutrionalValuePreferences } from "./hooks/useNutrionalValuePreferences";
 import { useHidingNumbers } from "./hooks/useHidingNumbers";
 
-export default function App() {
+export function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
   const history = useHistory();
@@ -33,3 +33,5 @@ export default function App() {
     );
   }
 }
+
+export default registerRootComponent(App);
