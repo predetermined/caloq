@@ -4,7 +4,7 @@ import {
   RootStackParamList,
   RootStackScreenProps,
   RootTabScreenProps,
-} from "../../types";
+} from "../types";
 
 // Not in use, but great reference for later
 export default function ModalScreen({
