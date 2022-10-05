@@ -29,7 +29,10 @@ export function HistoryScreen() {
   }, [history.entries]);
 
   return (
-    <View style={sharedStyles.screenView}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      style={{ ...sharedStyles.screenView, ...sharedStyles.section }}
+    >
       <View
         style={{
           ...sharedStyles.section,
@@ -37,8 +40,6 @@ export function HistoryScreen() {
           display: "flex",
           flexDirection: "row",
           justifyContent: "center",
-          marginLeft: 15,
-          marginRight: 15,
           backgroundColor: sharedColors.gray[9],
           padding: 30,
           borderRadius: defaultBorderRadius,
@@ -71,7 +72,7 @@ export function HistoryScreen() {
               color: "white",
             }}
           >
-            {history.weeks.last.avg.kcal} kcal
+            {Math.round(history.weeks.last.avg.kcal)} kcal
           </StyledText>
         </View>
 
@@ -101,78 +102,73 @@ export function HistoryScreen() {
               color: "white",
             }}
           >
-            {history.weeks.current.avg.kcal} kcal
+            {Math.round(history.weeks.current.avg.kcal)} kcal
           </StyledText>
         </View>
       </View>
 
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={{ ...sharedStyles.section }}
-      >
-        <View>
-          {history.entries.length === 0 ? (
-            <StyledText>Nothing here yet. Btw., you are amazing!</StyledText>
-          ) : null}
+      <View>
+        {history.entries.length === 0 ? (
+          <StyledText>Nothing here yet. Btw., you are amazing!</StyledText>
+        ) : null}
 
-          <View style={{ paddingBottom: endPadding }}>
-            {Object.keys(historyGroupedByDate)
-              .slice(0, 7)
-              .map((date, i) => {
-                const entries = historyGroupedByDate[date];
-                const sum = calculateSum(entries);
+        <View style={{ paddingBottom: endPadding }}>
+          {Object.keys(historyGroupedByDate)
+            .slice(0, 7)
+            .map((date, i) => {
+              const entries = historyGroupedByDate[date];
+              const sum = calculateSum(entries);
 
-                return (
-                  <View key={date}>
-                    <StyledText
-                      style={{
-                        fontSize: 20,
-                        marginBottom: 5,
-                        marginTop: i === 0 ? 0 : 25,
-                      }}
-                    >
-                      {date}
-                    </StyledText>
+              return (
+                <View key={date}>
+                  <StyledText
+                    style={{
+                      fontSize: 20,
+                      marginBottom: 5,
+                      marginTop: i === 0 ? 0 : 25,
+                    }}
+                  >
+                    {date}
+                  </StyledText>
 
-                    <StyledText
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        fontSize: 11,
-                        marginBottom: 15,
-                        color: sharedColors.gray[5],
-                        lineHeight: 13,
-                      }}
-                    >
-                      {nutrionalValuePreferences.enabledValues.map((key, i) => {
-                        return (
-                          <StyledText key={key}>
-                            {i === 0 ? null : " • "}
-                            <StyledText style={{ color: "black" }}>
-                              {hidingNumbers.isHiding ? "X" : sum[key]}
-                              {OPTIONS[key].representation.valueRelated.unit}
-                            </StyledText>{" "}
-                            {OPTIONS[key].representation.valueRelated.suffix}
-                          </StyledText>
-                        );
-                      })}
-                    </StyledText>
-
-                    {entries.map((entry, i) => {
+                  <StyledText
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      fontSize: 11,
+                      marginBottom: 15,
+                      color: sharedColors.gray[5],
+                      lineHeight: 13,
+                    }}
+                  >
+                    {nutrionalValuePreferences.enabledValues.map((key, i) => {
                       return (
-                        <HistoryEntry
-                          key={entry.dateIso}
-                          entry={entry}
-                          style={{ marginTop: i === 0 ? 0 : 15 }}
-                        />
+                        <StyledText key={key}>
+                          {i === 0 ? null : " • "}
+                          <StyledText style={{ color: "black" }}>
+                            {hidingNumbers.isHiding ? "X" : sum[key]}
+                            {OPTIONS[key].representation.valueRelated.unit}
+                          </StyledText>{" "}
+                          {OPTIONS[key].representation.valueRelated.suffix}
+                        </StyledText>
                       );
                     })}
-                  </View>
-                );
-              })}
-          </View>
+                  </StyledText>
+
+                  {entries.map((entry, i) => {
+                    return (
+                      <HistoryEntry
+                        key={entry.dateIso}
+                        entry={entry}
+                        style={{ marginTop: i === 0 ? 0 : 15 }}
+                      />
+                    );
+                  })}
+                </View>
+              );
+            })}
         </View>
-      </ScrollView>
-    </View>
+      </View>
+    </ScrollView>
   );
 }
