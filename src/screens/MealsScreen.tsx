@@ -55,26 +55,14 @@ export function MealsScreen() {
         showsVerticalScrollIndicator={false}
         style={{ ...sharedStyles.screenView, ...sharedStyles.section }}
       >
-        <View style={sharedStyles.titleView}>
-          <StyledText
-            style={{
-              ...sharedStyles.screenTitle,
-            }}
-          >
-            Meals
-          </StyledText>
-        </View>
-
-        <View style={{ marginTop: 15 }}>
+        <View>
           <View
             style={{
               borderWidth: 1,
               borderColor: defaultBorderColor,
               borderRadius: defaultBorderRadius,
               padding: 15,
-              elevation: 7,
               backgroundColor: "white",
-              shadowColor: "rgba(0, 0, 0, 0.25)",
             }}
           >
             <View>

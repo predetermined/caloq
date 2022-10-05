@@ -17,7 +17,7 @@ export const sharedColors = {
   red: "#dc2626",
 };
 
-export const defaultBorderColor = sharedColors.gray[3];
+export const defaultBorderColor = "#ededed";
 export const defaultBorderRadius = 3;
 export const defaultFontSize = 14;
 export const defaultFontFamily = "Azeret-Mono";
@@ -34,15 +34,15 @@ export const sharedStyles = StyleSheet.create({
   },
   screenTitle: {
     marginTop: 0,
-    fontSize: 23,
-    fontWeight: "300",
+    fontSize: 25,
+    lineHeight: 24,
+    fontFamily: "Azeret-Mono-SemiBold",
   },
   titleView: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingBottom: 5,
   },
   labelText: {
     display: "flex",
@@ -71,6 +71,5 @@ export const sharedStyles = StyleSheet.create({
     textAlign: "center",
     backgroundColor: "black",
     color: "white",
-    fontFamily: defaultFontFamily,
   },
 });

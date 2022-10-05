@@ -166,15 +166,11 @@ export function HomeScreen(_props: RootTabScreenProps<"Home">) {
           style={{
             ...sharedStyles.section,
             ...sharedStyles.titleView,
+            justifyContent: "flex-end",
             backgroundColor: "white",
+            zIndex: 1,
           }}
         >
-          <StyledText style={sharedStyles.screenTitle}>
-            New
-            {"\n"}
-            entry
-          </StyledText>
-
           <Pressable>
             <StyledText
               style={{
@@ -199,7 +195,7 @@ export function HomeScreen(_props: RootTabScreenProps<"Home">) {
           </Pressable>
         </View>
 
-        <View style={{ backgroundColor: "white" }}>
+        <View style={{ marginTop: -15, backgroundColor: "white" }}>
           <View
             style={{
               ...sharedStyles.section,
@@ -265,12 +261,10 @@ export function HomeScreen(_props: RootTabScreenProps<"Home">) {
             <View
               style={{
                 borderWidth: 1,
-                borderColor: sharedColors.gray[2],
+                borderColor: defaultBorderColor,
                 padding: 15,
                 borderRadius: defaultBorderRadius,
-                elevation: 7,
                 backgroundColor: "white",
-                shadowColor: "rgba(0, 0, 0, 0.25)",
               }}
             >
               {addManually ? (
@@ -351,12 +345,11 @@ export function HomeScreen(_props: RootTabScreenProps<"Home">) {
                           <Picker
                             style={{
                               paddingLeft: 7,
-                              backgroundColor: sharedColors.gray[8],
-                              color: sharedColors.gray[3],
+                              backgroundColor: sharedColors.gray[2],
                               fontSize: defaultFontSize,
                               marginTop: -8,
                             }}
-                            dropdownIconColor={sharedColors.gray[3]}
+                            dropdownIconColor={sharedColors.gray[4]}
                             selectedValue={pickerValue}
                             onValueChange={selectMeal}
                           >
@@ -474,7 +467,7 @@ export function HomeScreen(_props: RootTabScreenProps<"Home">) {
             style={{
               marginTop: 30,
               transform: [{ rotate: "4deg" }],
-              backgroundColor: sharedColors.gray[1],
+              backgroundColor: sharedColors.gray[0],
               height: 40,
               width: "120%",
               marginLeft: -20,
@@ -486,7 +479,7 @@ export function HomeScreen(_props: RootTabScreenProps<"Home">) {
           <View
             style={{
               ...sharedStyles.section,
-              backgroundColor: sharedColors.gray[1],
+              backgroundColor: sharedColors.gray[0],
               paddingBottom: endPadding,
             }}
           >

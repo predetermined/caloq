@@ -16,6 +16,28 @@ export function uniqifyEntry(entry: HistoryEntry) {
   return JSON.stringify(entry);
 }
 
+export function getLastSundayDate(from = new Date()) {
+  const lastSunday = new Date(
+    from.getTime() - from.getDay() * 1000 * 60 * 60 * 24
+  );
+  lastSunday.setHours(0);
+  lastSunday.setMinutes(0);
+  lastSunday.setSeconds(0);
+  lastSunday.setMilliseconds(0);
+  return lastSunday;
+}
+
+export function getNextSundayDate(from = new Date()) {
+  const nextSunday = new Date(
+    from.getTime() + (6 - from.getDay()) * 1000 * 60 * 60 * 24
+  );
+  nextSunday.setHours(0);
+  nextSunday.setMinutes(0);
+  nextSunday.setSeconds(0);
+  nextSunday.setMilliseconds(0);
+  return nextSunday;
+}
+
 export function useHistory() {
   const [entries, setEntries] = useState<HistoryEntry[]>([]);
 
@@ -70,6 +92,63 @@ export function useHistory() {
     };
   }, [entries.length]);
 
+  const weeks = useMemo(() => {
+    const [currentWeek, lastWeek] = [
+      getLastSundayDate(),
+      getNextSundayDate(
+        new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 7)
+      ),
+    ].map((startDate) => {
+      const endDate = getNextSundayDate(startDate);
+      const entriesWithinTimeFrame = entries.filter((entry) => {
+        const entryDate = new Date(entry.dateIso);
+
+        return (
+          entryDate.getTime() >= startDate.getTime() &&
+          entryDate.getTime() < endDate.getTime()
+        );
+      });
+
+      const sum = entriesWithinTimeFrame.reduce(
+        (sum, entry) => {
+          const updatedSum = sum;
+
+          for (const _key in OPTIONS) {
+            const key = _key as OptionKey;
+            updatedSum[key] += entry[key] || 0;
+          }
+
+          return updatedSum;
+        },
+        { ...EMPTY_NUTRIONAL_VALUES_NUMBERS }
+      );
+
+      const uniqueDaysCount = [
+        ...new Set(entriesWithinTimeFrame.map((entry) => entry.dateReadable)),
+      ].length;
+
+      const avg = Object.entries(sum).reduce(
+        (avg, [key, value]) => {
+          return {
+            ...avg,
+            [key]: value / Math.max(uniqueDaysCount, 1),
+          };
+        },
+        { ...EMPTY_NUTRIONAL_VALUES_NUMBERS }
+      );
+
+      return {
+        sum,
+        avg,
+      };
+    });
+
+    return {
+      current: currentWeek,
+      last: lastWeek,
+    };
+  }, [entries.length]);
+
   async function add(entry: HistoryEntry) {
     try {
       await AsyncStorage.setItem(
@@ -111,6 +190,7 @@ export function useHistory() {
   return {
     entries,
     today,
+    weeks,
     reload: loadEntries,
     add,
     addMany,

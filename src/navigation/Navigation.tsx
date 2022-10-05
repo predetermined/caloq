@@ -74,7 +74,7 @@ function RootNavigator() {
                 <Pressable
                   style={{
                     paddingTop: 5,
-                    paddingBottom: 5,
+                    paddingBottom: 10,
                     paddingRight: 15,
                   }}
                   onPress={() => navigation.navigate("Settings")}

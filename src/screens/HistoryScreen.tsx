@@ -2,7 +2,13 @@ import { useContext, useMemo } from "react";
 import { ScrollView, View } from "react-native";
 import { HistoryEntry } from "../components/HistoryEntry";
 import { StyledText } from "../components/StyledText";
-import { endPadding, sharedColors, sharedStyles } from "../constants/layout";
+import {
+  endPadding,
+  sharedColors,
+  sharedStyles,
+  defaultBorderRadius,
+  defaultBorderColor,
+} from "../constants/layout";
 import { AppContext } from "../contexts/appContext";
 import { OPTIONS } from "../hooks/useNutrionalValuePreferences";
 import { calculateSum } from "../lib/calculateSum";
@@ -23,22 +29,88 @@ export function HistoryScreen() {
   }, [history.entries]);
 
   return (
-    <>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={{ ...sharedStyles.screenView, ...sharedStyles.section }}
+    <View style={sharedStyles.screenView}>
+      <View
+        style={{
+          ...sharedStyles.section,
+          marginBottom: 20,
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          marginLeft: 15,
+          marginRight: 15,
+          backgroundColor: sharedColors.gray[9],
+          padding: 30,
+          borderRadius: defaultBorderRadius,
+          elevation: 7,
+          shadowColor: "rgba(0, 0, 0, 0.25)",
+        }}
       >
-        <View style={sharedStyles.titleView}>
+        <View
+          style={{
+            width: "50%",
+            borderRadius: defaultBorderRadius,
+            marginRight: 5,
+          }}
+        >
           <StyledText
             style={{
-              ...sharedStyles.screenTitle,
+              fontSize: 11,
+              textAlign: "center",
+              marginBottom: 5,
+              fontFamily: "Azeret-Mono-Italic",
+              color: "white",
             }}
           >
-            History
+            Last week avg.
+          </StyledText>
+          <StyledText
+            style={{
+              textAlign: "center",
+              fontSize: 18,
+              color: "white",
+            }}
+          >
+            {history.weeks.last.avg.kcal} kcal
           </StyledText>
         </View>
 
-        <View style={{ marginTop: 15 }}>
+        <View
+          style={{
+            width: "50%",
+            borderColor: defaultBorderColor,
+            borderRadius: defaultBorderRadius,
+            marginLeft: 5,
+          }}
+        >
+          <StyledText
+            style={{
+              fontSize: 11,
+              textAlign: "center",
+              marginBottom: 5,
+              fontFamily: "Azeret-Mono-Italic",
+              color: "white",
+            }}
+          >
+            This week avg.
+          </StyledText>
+          <StyledText
+            style={{
+              textAlign: "center",
+              fontSize: 18,
+              color: "white",
+            }}
+          >
+            {history.weeks.current.avg.kcal} kcal
+          </StyledText>
+        </View>
+      </View>
+
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{ ...sharedStyles.section }}
+      >
+        <View>
           {history.entries.length === 0 ? (
             <StyledText>Nothing here yet. Btw., you are amazing!</StyledText>
           ) : null}
@@ -101,6 +173,6 @@ export function HistoryScreen() {
           </View>
         </View>
       </ScrollView>
-    </>
+    </View>
   );
 }

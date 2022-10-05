@@ -129,16 +129,6 @@ export function SettingsScreen() {
         showsVerticalScrollIndicator={false}
         style={{ ...sharedStyles.screenView, ...sharedStyles.section }}
       >
-        <View style={sharedStyles.titleView}>
-          <StyledText
-            style={{
-              ...sharedStyles.screenTitle,
-            }}
-          >
-            Settings
-          </StyledText>
-        </View>
-
         <View style={{ marginTop: 15 }}>
           <StyledText
             style={{

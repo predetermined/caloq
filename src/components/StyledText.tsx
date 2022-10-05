@@ -5,8 +5,8 @@ export function StyledText(props: TextProps) {
     <Text
       {...props}
       style={[
-        props.style,
         { fontFamily: "Azeret-Mono", includeFontPadding: false },
+        props.style,
       ]}
     />
   );
