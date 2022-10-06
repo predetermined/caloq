@@ -95,7 +95,7 @@ export function useHistory() {
   const weeks = useMemo(() => {
     const [currentWeek, lastWeek] = [
       getLastSundayDate(),
-      getNextSundayDate(
+      getLastSundayDate(
         new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 7)
       ),
     ].map((startDate) => {
