@@ -4,7 +4,7 @@
     "name": "caloq",
     "owner": "l5d",
     "slug": "caloq",
-    "version": "1.1.2",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "caloq",
@@ -28,7 +28,7 @@
       },
       "package": "li.l5d.caloq",
       "permissions": [],
-      "versionCode": 112
+      "versionCode": 120
     },
     "extra": {
       "eas": {
