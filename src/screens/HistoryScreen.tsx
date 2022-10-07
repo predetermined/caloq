@@ -63,7 +63,7 @@ export function HistoryScreen() {
               color: "white",
             }}
           >
-            Last week avg.
+            Last 30 days avg.
           </StyledText>
           <StyledText
             style={{
@@ -72,7 +72,7 @@ export function HistoryScreen() {
               color: "white",
             }}
           >
-            {Math.round(history.weeks.last.avg.kcal)} kcal
+            {Math.round(history.comparisonPeriods.last30Days.avg.kcal)} kcal
           </StyledText>
         </View>
 
@@ -93,7 +93,7 @@ export function HistoryScreen() {
               color: "white",
             }}
           >
-            This week avg.
+            Last 7 days avg.
           </StyledText>
           <StyledText
             style={{
@@ -102,14 +102,14 @@ export function HistoryScreen() {
               color: "white",
             }}
           >
-            {Math.round(history.weeks.current.avg.kcal)} kcal
+            {Math.round(history.comparisonPeriods.last7Days.avg.kcal)} kcal
           </StyledText>
         </View>
       </View>
 
       <View>
         {history.entries.length === 0 ? (
-          <StyledText>Nothing here yet. Btw., you are amazing!</StyledText>
+          <StyledText>Nothing here yet. Keep going!</StyledText>
         ) : null}
 
         <View style={{ paddingBottom: endPadding }}>

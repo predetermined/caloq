@@ -92,21 +92,14 @@ export function useHistory() {
     };
   }, [entries.length]);
 
-  const weeks = useMemo(() => {
-    const [currentWeek, lastWeek] = [
-      getLastSundayDate(),
-      getLastSundayDate(
-        new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 7)
-      ),
-    ].map((startDate) => {
-      const endDate = getNextSundayDate(startDate);
-      const entriesWithinTimeFrame = entries.filter((entry) => {
-        const entryDate = new Date(entry.dateIso);
+  const comparisonPeriods = useMemo(() => {
+    const [last30Days, last7Days] = [30, 7].map((lastDaysToInclude) => {
+      const minDate = new Date(
+        new Date().getTime() - 1000 * 60 * 60 * 24 * lastDaysToInclude
+      );
 
-        return (
-          entryDate.getTime() >= startDate.getTime() &&
-          entryDate.getTime() < endDate.getTime()
-        );
+      const entriesWithinTimeFrame = entries.filter((entry) => {
+        return new Date(entry.dateIso) >= minDate;
       });
 
       const sum = entriesWithinTimeFrame.reduce(
@@ -144,8 +137,8 @@ export function useHistory() {
     });
 
     return {
-      current: currentWeek,
-      last: lastWeek,
+      last30Days,
+      last7Days,
     };
   }, [entries.length]);
 
@@ -190,7 +183,7 @@ export function useHistory() {
   return {
     entries,
     today,
-    weeks,
+    comparisonPeriods,
     reload: loadEntries,
     add,
     addMany,

@@ -29,10 +29,10 @@ import {
 
 const styles = StyleSheet.create({
   tab: {
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingTop: 10,
-    paddingBottom: 10,
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 11,
+    paddingBottom: 11,
     backgroundColor: sharedColors.gray[1],
     borderTopLeftRadius: defaultBorderRadius,
     borderTopRightRadius: defaultBorderRadius,
@@ -41,8 +41,8 @@ const styles = StyleSheet.create({
   activeTab: {
     backgroundColor: "#dc2626",
     color: "white",
-    paddingTop: 11,
-    paddingBottom: 11,
+    paddingTop: 13,
+    paddingBottom: 13,
     zIndex: 30,
   },
   tabText: {
@@ -167,7 +167,6 @@ export function HomeScreen(_props: RootTabScreenProps<"Home">) {
             ...sharedStyles.section,
             ...sharedStyles.titleView,
             justifyContent: "flex-end",
-            backgroundColor: "white",
             zIndex: 1,
           }}
         >
@@ -195,7 +194,7 @@ export function HomeScreen(_props: RootTabScreenProps<"Home">) {
           </Pressable>
         </View>
 
-        <View style={{ marginTop: -15, backgroundColor: "white" }}>
+        <View style={{ marginTop: -30, backgroundColor: "white" }}>
           <View
             style={{
               ...sharedStyles.section,
