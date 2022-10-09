@@ -8,6 +8,7 @@ import {
   NavigationContainer,
   DefaultTheme,
   DarkTheme,
+  useNavigation,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
@@ -20,7 +21,7 @@ import {
 } from "react-native";
 import { StyledText } from "../components/StyledText";
 
-import { sharedColors } from "../constants/layout";
+import { screenBackgroundColor, sharedColors } from "../constants/layout";
 import { MealsScreen } from "../screens/MealsScreen";
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
@@ -50,33 +51,30 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Stack.Screen
-        name="Root"
-        component={BottomTabNavigator}
-        options={{
+    <>
+      <Stack.Navigator
+        screenOptions={{
           headerShown: true,
+          headerShadowVisible: false,
+          headerLargeTitleShadowVisible: false,
+          headerTransparent: true,
+          headerTitle: () => {
+            const navigation = useNavigation();
 
-          header: ({ navigation }) => {
             return (
               <View
                 style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-end",
-                  backgroundColor: "white",
+                  marginLeft: "100%",
+                  marginTop: -10,
                 }}
               >
                 <Pressable
                   style={{
-                    paddingTop: 5,
-                    paddingBottom: 10,
-                    paddingRight: 15,
+                    padding: 10,
+                    zIndex: 100,
+                    marginLeft: -60,
                   }}
+                  // @ts-ignore
                   onPress={() => navigation.navigate("Settings")}
                 >
                   <StyledText>
@@ -87,16 +85,18 @@ function RootNavigator() {
             );
           },
         }}
-      />
-      <Stack.Screen
-        name="NotFound"
-        component={NotFoundScreen}
-        options={{ title: "Oops!" }}
-      />
-      <Stack.Group screenOptions={{ presentation: "modal" }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
-      </Stack.Group>
-    </Stack.Navigator>
+      >
+        <Stack.Screen name="Root" component={BottomTabNavigator} />
+        <Stack.Screen
+          name="NotFound"
+          component={NotFoundScreen}
+          options={{ title: "Oops!" }}
+        />
+        <Stack.Group screenOptions={{ presentation: "modal" }}>
+          <Stack.Screen name="Modal" component={ModalScreen} />
+        </Stack.Group>
+      </Stack.Navigator>
+    </>
   );
 }
 
@@ -119,118 +119,128 @@ function BottomTabNavigator() {
     <BottomTab.Navigator
       initialRouteName="Home"
       screenOptions={{ headerShown: false, tabBarHideOnKeyboard: true }}
-      tabBar={({ navigation }) => {
+      tabBar={({ navigation, state }) => {
+        const activeRouteName = state.routes[state.index].name;
+
         return (
-          <View
-            style={{
-              padding: 25,
-              backgroundColor: "transparent",
-              position: "absolute",
-              bottom: 0,
-              display: isKeyboardOpen ? "none" : "flex",
-            }}
-          >
+          <>
+            <StatusBar
+              barStyle={"dark-content"}
+              backgroundColor={
+                activeRouteName === "Meals" ? "white" : screenBackgroundColor
+              }
+            />
             <View
               style={{
-                shadowColor: "rgba(0, 0, 0, 0.7)",
-                shadowOpacity: 1,
-                shadowOffset: {
-                  height: 10,
-                  width: 10,
-                },
-                elevation: 7,
-                backgroundColor: "black",
-                borderRadius: 10,
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
+                padding: 25,
+                backgroundColor: "transparent",
+                position: "absolute",
+                bottom: 0,
+                display: isKeyboardOpen ? "none" : "flex",
               }}
             >
               <View
                 style={{
-                  width: "33.33%",
-                  overflow: "hidden",
+                  shadowColor: "rgba(0, 0, 0, 0.7)",
+                  shadowOpacity: 1,
+                  shadowOffset: {
+                    height: 10,
+                    width: 10,
+                  },
+                  elevation: 7,
+                  backgroundColor: "black",
                   borderRadius: 10,
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
                 }}
               >
-                <Pressable
-                  onPress={() => navigation.navigate("Meals")}
-                  android_ripple={{
-                    color: sharedColors.gray[7],
-                    foreground: true,
+                <View
+                  style={{
+                    width: "33.33%",
+                    overflow: "hidden",
+                    borderRadius: 10,
                   }}
                 >
-                  <StyledText
-                    style={{
-                      color: "white",
-                      padding: 15,
-                      textAlign: "center",
+                  <Pressable
+                    onPress={() => navigation.navigate("Meals")}
+                    android_ripple={{
+                      color: sharedColors.gray[7],
+                      foreground: true,
                     }}
                   >
-                    Meals
-                  </StyledText>
-                </Pressable>
-              </View>
+                    <StyledText
+                      style={{
+                        color: "white",
+                        padding: 15,
+                        textAlign: "center",
+                      }}
+                    >
+                      Meals
+                    </StyledText>
+                  </Pressable>
+                </View>
 
-              <View
-                style={{
-                  width: "30%",
-                  overflow: "hidden",
-                  borderRadius: 5,
-                  marginTop: -8,
-                  marginBottom: 8,
-                }}
-              >
-                <Pressable
-                  onPress={() => navigation.navigate("Home")}
-                  android_ripple={{
-                    color: sharedColors.gray[6],
-                    foreground: true,
+                <View
+                  style={{
+                    width: "30%",
+                    overflow: "hidden",
+                    borderRadius: 5,
+                    marginTop: -8,
+                    marginBottom: 8,
                   }}
                 >
-                  <StyledText
-                    style={{
-                      color: "white",
-                      padding: 10,
-                      textAlign: "center",
-                      backgroundColor: sharedColors.gray[8],
-                      borderRadius: 5,
-                      elevation: 10,
+                  <Pressable
+                    onPress={() => navigation.navigate("Home")}
+                    android_ripple={{
+                      color: sharedColors.gray[6],
+                      foreground: true,
                     }}
                   >
-                    New entry
-                  </StyledText>
-                </Pressable>
-              </View>
+                    <StyledText
+                      style={{
+                        color: "white",
+                        padding: 10,
+                        textAlign: "center",
+                        backgroundColor: sharedColors.gray[8],
+                        borderRadius: 5,
+                        elevation: 10,
+                      }}
+                    >
+                      New entry
+                    </StyledText>
+                  </Pressable>
+                </View>
 
-              <View
-                style={{
-                  width: "33.33%",
-                  overflow: "hidden",
-                  borderRadius: 10,
-                }}
-              >
-                <Pressable
-                  onPress={() => navigation.navigate("History")}
-                  android_ripple={{
-                    color: sharedColors.gray[7],
-                    foreground: true,
+                <View
+                  style={{
+                    width: "33.33%",
+                    overflow: "hidden",
+                    borderRadius: 10,
                   }}
                 >
-                  <StyledText
-                    style={{
-                      color: "white",
-                      padding: 15,
-                      textAlign: "center",
+                  <Pressable
+                    onPress={() => navigation.navigate("History")}
+                    android_ripple={{
+                      color: sharedColors.gray[7],
+                      foreground: true,
                     }}
                   >
-                    History
-                  </StyledText>
-                </Pressable>
+                    <StyledText
+                      style={{
+                        color: "white",
+                        padding: 15,
+                        textAlign: "center",
+                      }}
+                    >
+                      History
+                    </StyledText>
+                  </Pressable>
+                </View>
               </View>
             </View>
-          </View>
+          </>
         );
       }}
     >

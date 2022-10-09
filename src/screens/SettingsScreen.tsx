@@ -1,11 +1,19 @@
 import { useContext } from "react";
-import { Pressable, ScrollView, View, ToastAndroid } from "react-native";
+import {
+  Pressable,
+  ScrollView,
+  View,
+  ToastAndroid,
+  StatusBar,
+} from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { StyledText } from "../components/StyledText";
 import {
   defaultBorderRadius,
   defaultFontFamily,
   defaultFontSize,
+  firstElementTopMargin,
+  screenBackgroundColor,
   sharedColors,
   sharedStyles,
 } from "../constants/layout";
@@ -127,9 +135,10 @@ export function SettingsScreen() {
     <>
       <ScrollView
         showsVerticalScrollIndicator={false}
+        overScrollMode="never"
         style={{ ...sharedStyles.screenView, ...sharedStyles.section }}
       >
-        <View>
+        <View style={{ marginTop: firstElementTopMargin }}>
           <StyledText
             style={{
               fontSize: 20,
@@ -162,7 +171,7 @@ export function SettingsScreen() {
                 iconStyle={{ borderRadius: defaultBorderRadius }}
                 text={option.label}
                 style={{
-                  marginTop: i === 0 ? 0 : 15,
+                  marginTop: i === 0 ? 0 : 10,
                 }}
                 isChecked={nutrionalValuePreferences.enabledValues.includes(
                   key

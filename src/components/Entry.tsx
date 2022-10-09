@@ -7,6 +7,8 @@ import {
 } from "../constants/layout";
 import { StyledText } from "./StyledText";
 
+export const entryTopMargin = 10;
+
 export function Entry({
   children,
   style,
@@ -14,11 +16,12 @@ export function Entry({
   return (
     <View
       style={{
-        borderWidth: 1,
-        borderColor: defaultBorderColor,
         borderRadius: defaultBorderRadius,
-        padding: 15,
-        marginTop: 15,
+        padding: 20,
+        marginTop: entryTopMargin,
+        backgroundColor: "white",
+        elevation: 4,
+        shadowColor: "rgba(0, 0, 0, 0.1)",
         ...style,
       }}
     >

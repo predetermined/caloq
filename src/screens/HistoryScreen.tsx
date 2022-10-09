@@ -1,5 +1,6 @@
 import { useContext, useMemo } from "react";
-import { ScrollView, View } from "react-native";
+import { ScrollView, StatusBar, View } from "react-native";
+import { entryTopMargin } from "../components/Entry";
 import { HistoryEntry } from "../components/HistoryEntry";
 import { StyledText } from "../components/StyledText";
 import {
@@ -8,6 +9,8 @@ import {
   sharedStyles,
   defaultBorderRadius,
   defaultBorderColor,
+  firstElementTopMargin,
+  screenBackgroundColor,
 } from "../constants/layout";
 import { AppContext } from "../contexts/appContext";
 import { OPTIONS } from "../hooks/useNutrionalValuePreferences";
@@ -29,146 +32,153 @@ export function HistoryScreen() {
   }, [history.entries]);
 
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      style={{ ...sharedStyles.screenView, ...sharedStyles.section }}
-    >
-      <View
+    <>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        overScrollMode="never"
         style={{
+          ...sharedStyles.screenView,
           ...sharedStyles.section,
-          marginBottom: 20,
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          backgroundColor: sharedColors.gray[9],
-          padding: 30,
-          borderRadius: defaultBorderRadius,
-          elevation: 7,
-          shadowColor: "rgba(0, 0, 0, 0.25)",
         }}
       >
         <View
           style={{
-            width: "50%",
+            ...sharedStyles.section,
+            marginBottom: 20,
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            backgroundColor: sharedColors.gray[9],
+            padding: 20,
             borderRadius: defaultBorderRadius,
-            marginRight: 5,
+            elevation: 16,
+            shadowColor: "rgba(0, 0, 0, 0.3)",
+            marginTop: firstElementTopMargin,
           }}
         >
-          <StyledText
+          <View
             style={{
-              fontSize: 11,
-              textAlign: "center",
-              marginBottom: 5,
-              fontFamily: "Azeret-Mono-Italic",
-              color: "white",
+              width: "50%",
+              borderRadius: defaultBorderRadius,
+              marginRight: 5,
             }}
           >
-            Last 30 days avg.
-          </StyledText>
-          <StyledText
+            <StyledText
+              style={{
+                fontSize: 11,
+                textAlign: "center",
+                marginBottom: 5,
+                fontFamily: "Azeret-Mono-Italic",
+                color: "white",
+              }}
+            >
+              Last 30 days avg.
+            </StyledText>
+            <StyledText
+              style={{
+                textAlign: "center",
+                fontSize: 18,
+                color: "white",
+              }}
+            >
+              {Math.round(history.comparisonPeriods.last30Days.avg.kcal)} kcal
+            </StyledText>
+          </View>
+
+          <View
             style={{
-              textAlign: "center",
-              fontSize: 18,
-              color: "white",
+              width: "50%",
+              borderColor: defaultBorderColor,
+              borderRadius: defaultBorderRadius,
+              marginLeft: 5,
             }}
           >
-            {Math.round(history.comparisonPeriods.last30Days.avg.kcal)} kcal
-          </StyledText>
+            <StyledText
+              style={{
+                fontSize: 11,
+                textAlign: "center",
+                marginBottom: 5,
+                fontFamily: "Azeret-Mono-Italic",
+                color: "white",
+              }}
+            >
+              Last 7 days avg.
+            </StyledText>
+            <StyledText
+              style={{
+                textAlign: "center",
+                fontSize: 18,
+                color: "white",
+              }}
+            >
+              {Math.round(history.comparisonPeriods.last7Days.avg.kcal)} kcal
+            </StyledText>
+          </View>
         </View>
 
-        <View
-          style={{
-            width: "50%",
-            borderColor: defaultBorderColor,
-            borderRadius: defaultBorderRadius,
-            marginLeft: 5,
-          }}
-        >
-          <StyledText
-            style={{
-              fontSize: 11,
-              textAlign: "center",
-              marginBottom: 5,
-              fontFamily: "Azeret-Mono-Italic",
-              color: "white",
-            }}
-          >
-            Last 7 days avg.
-          </StyledText>
-          <StyledText
-            style={{
-              textAlign: "center",
-              fontSize: 18,
-              color: "white",
-            }}
-          >
-            {Math.round(history.comparisonPeriods.last7Days.avg.kcal)} kcal
-          </StyledText>
-        </View>
-      </View>
+        <View>
+          {history.entries.length === 0 ? (
+            <StyledText>Nothing here yet. Keep going!</StyledText>
+          ) : null}
 
-      <View>
-        {history.entries.length === 0 ? (
-          <StyledText>Nothing here yet. Keep going!</StyledText>
-        ) : null}
+          <View style={{ paddingBottom: endPadding }}>
+            {Object.keys(historyGroupedByDate)
+              .slice(0, 7)
+              .map((date, i) => {
+                const entries = historyGroupedByDate[date];
+                const sum = calculateSum(entries);
 
-        <View style={{ paddingBottom: endPadding }}>
-          {Object.keys(historyGroupedByDate)
-            .slice(0, 7)
-            .map((date, i) => {
-              const entries = historyGroupedByDate[date];
-              const sum = calculateSum(entries);
+                return (
+                  <View key={date}>
+                    <StyledText
+                      style={{
+                        fontSize: 20,
+                        marginBottom: 5,
+                        marginTop: i === 0 ? 0 : 25,
+                      }}
+                    >
+                      {date}
+                    </StyledText>
 
-              return (
-                <View key={date}>
-                  <StyledText
-                    style={{
-                      fontSize: 20,
-                      marginBottom: 5,
-                      marginTop: i === 0 ? 0 : 25,
-                    }}
-                  >
-                    {date}
-                  </StyledText>
+                    <StyledText
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        fontSize: 11,
+                        marginBottom: 15,
+                        color: sharedColors.gray[5],
+                        lineHeight: 13,
+                      }}
+                    >
+                      {nutrionalValuePreferences.enabledValues.map((key, i) => {
+                        return (
+                          <StyledText key={key}>
+                            {i === 0 ? null : " • "}
+                            <StyledText style={{ color: "black" }}>
+                              {hidingNumbers.isHiding ? "X" : sum[key]}
+                              {OPTIONS[key].representation.valueRelated.unit}
+                            </StyledText>{" "}
+                            {OPTIONS[key].representation.valueRelated.suffix}
+                          </StyledText>
+                        );
+                      })}
+                    </StyledText>
 
-                  <StyledText
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      fontSize: 11,
-                      marginBottom: 15,
-                      color: sharedColors.gray[5],
-                      lineHeight: 13,
-                    }}
-                  >
-                    {nutrionalValuePreferences.enabledValues.map((key, i) => {
+                    {entries.map((entry, i) => {
                       return (
-                        <StyledText key={key}>
-                          {i === 0 ? null : " • "}
-                          <StyledText style={{ color: "black" }}>
-                            {hidingNumbers.isHiding ? "X" : sum[key]}
-                            {OPTIONS[key].representation.valueRelated.unit}
-                          </StyledText>{" "}
-                          {OPTIONS[key].representation.valueRelated.suffix}
-                        </StyledText>
+                        <HistoryEntry
+                          key={entry.dateIso}
+                          entry={entry}
+                          style={{ marginTop: i === 0 ? 0 : entryTopMargin }}
+                        />
                       );
                     })}
-                  </StyledText>
-
-                  {entries.map((entry, i) => {
-                    return (
-                      <HistoryEntry
-                        key={entry.dateIso}
-                        entry={entry}
-                        style={{ marginTop: i === 0 ? 0 : 15 }}
-                      />
-                    );
-                  })}
-                </View>
-              );
-            })}
+                  </View>
+                );
+              })}
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </>
   );
 }

@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
-import { Keyboard, Pressable, ScrollView, View } from "react-native";
-import { DefaultEntry } from "../components/Entry";
+import { Keyboard, Pressable, ScrollView, StatusBar, View } from "react-native";
+import { DefaultEntry, entryTopMargin } from "../components/Entry";
 import { StyledText } from "../components/StyledText";
 import { StyledTextInput } from "../components/StyledTextInput";
 import {
@@ -8,6 +8,7 @@ import {
   defaultBorderRadius,
   defaultFontSize,
   endPadding,
+  firstElementTopMargin,
   sharedColors,
   sharedStyles,
 } from "../constants/layout";
@@ -53,148 +54,154 @@ export function MealsScreen() {
       <ScrollView
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
-        style={{ ...sharedStyles.screenView, ...sharedStyles.section }}
+        overScrollMode="never"
+        style={{ ...sharedStyles.screenView }}
       >
-        <View>
-          <View
-            style={{
-              borderWidth: 1,
-              borderColor: defaultBorderColor,
-              borderRadius: defaultBorderRadius,
-              padding: 15,
-              backgroundColor: "white",
-            }}
-          >
-            <View>
-              <StyledText style={sharedStyles.labelText}>Name</StyledText>
-              <StyledTextInput
-                value={newMealName}
-                onChangeText={(value) => setNewMealName(value)}
-                style={sharedStyles.textInput}
-                placeholder="Oatmeal"
-              />
-            </View>
+        <View
+          style={{
+            borderBottomRightRadius: 20,
+            borderBottomLeftRadius: 20,
+            padding: 15 + 20,
+            paddingTop: firstElementTopMargin,
+            backgroundColor: "white",
+            elevation: 16,
+            shadowColor: "rgba(0, 0, 0, 0.3)",
+          }}
+        >
+          <View>
+            <StyledText style={sharedStyles.labelText}>Name</StyledText>
+            <StyledTextInput
+              value={newMealName}
+              onChangeText={(value) => setNewMealName(value)}
+              style={sharedStyles.textInput}
+              placeholder="Oatmeal"
+            />
+          </View>
 
-            {nutrionalValuePreferences.enabledValues.map((key) => {
-              return (
-                <View
-                  key={key}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    marginTop: 15,
-                  }}
-                >
-                  <StyledText style={sharedStyles.labelText}>
-                    {OPTIONS[key].label} per 100g
-                  </StyledText>
-                  <StyledTextInput
-                    value={newNutrionalValues[key]}
-                    onChangeText={(value) =>
-                      setNewNutrionalValues({
-                        ...newNutrionalValues,
-                        [key]: value,
-                      })
-                    }
-                    style={sharedStyles.textInput}
-                    placeholder="0"
-                    keyboardType="numeric"
-                  />
-                </View>
-              );
-            })}
-
-            <Pressable
-              onPress={add}
-              style={{ marginTop: 15, ...sharedStyles.button }}
-              android_ripple={{
-                color: sharedColors.gray[5],
-                foreground: true,
-              }}
-            >
-              <StyledText
+          {nutrionalValuePreferences.enabledValues.map((key) => {
+            return (
+              <View
+                key={key}
                 style={{
-                  color: "white",
-                  fontSize: defaultFontSize,
-                  textAlign: "center",
+                  display: "flex",
+                  flexDirection: "column",
+                  marginTop: 15,
                 }}
               >
-                Add
-              </StyledText>
-            </Pressable>
-          </View>
-
-          <View style={{ paddingBottom: endPadding }}>
-            {Object.keys(meals.entries).map((mealKey, i) => {
-              const meal = meals.entries[mealKey];
-
-              const content = nutrionalValuePreferences.enabledValues.reduce(
-                (content, key, i) => {
-                  return (
-                    content +
-                    (i === 0 ? "" : "\n") +
-                    (meal[key] ?? "0") +
-                    OPTIONS[key].representation.valueRelated.unit +
-                    " " +
-                    OPTIONS[key].representation.valueRelated.suffix
-                  );
-                },
-                ""
-              );
-
-              return (
-                <DefaultEntry
-                  key={mealKey}
-                  title={mealKey}
-                  content={content}
-                  prefix={
-                    <View
-                      style={{
-                        display: "flex",
-                        flex: 1,
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Pressable
-                        disabled={i === 0}
-                        onPress={() => moveUpInOrder(mealKey)}
-                        style={{
-                          opacity: i === 0 ? 0.5 : 1,
-                          padding: 5,
-                          backgroundColor: "black",
-                          borderRadius: 100,
-                        }}
-                        android_ripple={{
-                          color: "rgba(255, 255, 255, 0.75)",
-                          foreground: true,
-                        }}
-                      >
-                        <StyledText>
-                          <Ionicons size={20} name="chevron-up" color="white" />
-                        </StyledText>
-                      </Pressable>
-                    </View>
+                <StyledText style={sharedStyles.labelText}>
+                  {OPTIONS[key].label} per 100g
+                </StyledText>
+                <StyledTextInput
+                  value={newNutrionalValues[key]}
+                  onChangeText={(value) =>
+                    setNewNutrionalValues({
+                      ...newNutrionalValues,
+                      [key]: value,
+                    })
                   }
-                  actions={
+                  style={sharedStyles.textInput}
+                  placeholder="0"
+                  keyboardType="numeric"
+                />
+              </View>
+            );
+          })}
+
+          <Pressable
+            onPress={add}
+            style={{ marginTop: 15, ...sharedStyles.button }}
+            android_ripple={{
+              color: sharedColors.gray[5],
+              foreground: true,
+            }}
+          >
+            <StyledText
+              style={{
+                color: "white",
+                fontSize: defaultFontSize,
+                textAlign: "center",
+              }}
+            >
+              Add
+            </StyledText>
+          </Pressable>
+        </View>
+
+        <View
+          style={{
+            ...sharedStyles.section,
+            paddingBottom: endPadding,
+          }}
+        >
+          {Object.keys(meals.entries).map((mealKey, i) => {
+            const meal = meals.entries[mealKey];
+
+            const content = nutrionalValuePreferences.enabledValues.reduce(
+              (content, key, i) => {
+                return (
+                  content +
+                  (i === 0 ? "" : "\n") +
+                  (meal[key] ?? "0") +
+                  OPTIONS[key].representation.valueRelated.unit +
+                  " " +
+                  OPTIONS[key].representation.valueRelated.suffix
+                );
+              },
+              ""
+            );
+
+            return (
+              <DefaultEntry
+                key={mealKey}
+                title={mealKey}
+                content={content}
+                prefix={
+                  <View
+                    style={{
+                      display: "flex",
+                      flex: 1,
+                      justifyContent: "center",
+                    }}
+                  >
                     <Pressable
+                      disabled={i === 0}
+                      onPress={() => moveUpInOrder(mealKey)}
                       style={{
-                        backgroundColor: "#dc2626",
-                        padding: 7,
-                        borderRadius: defaultBorderRadius,
+                        opacity: i === 0 ? 0.5 : 1,
+                        padding: 5,
+                        backgroundColor: "black",
+                        borderRadius: 100,
                       }}
-                      onPress={async () => {
-                        await meals.remove(mealKey);
+                      android_ripple={{
+                        color: "rgba(255, 255, 255, 0.75)",
+                        foreground: true,
                       }}
                     >
-                      <StyledText style={{ color: "white", fontSize: 12 }}>
-                        Delete
+                      <StyledText>
+                        <Ionicons size={20} name="chevron-up" color="white" />
                       </StyledText>
                     </Pressable>
-                  }
-                />
-              );
-            })}
-          </View>
+                  </View>
+                }
+                actions={
+                  <Pressable
+                    style={{
+                      backgroundColor: "#dc2626",
+                      padding: 7,
+                      borderRadius: defaultBorderRadius,
+                    }}
+                    onPress={async () => {
+                      await meals.remove(mealKey);
+                    }}
+                  >
+                    <StyledText style={{ color: "white", fontSize: 12 }}>
+                      Delete
+                    </StyledText>
+                  </Pressable>
+                }
+              />
+            );
+          })}
         </View>
       </ScrollView>
     </>

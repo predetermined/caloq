@@ -9,6 +9,7 @@ import { useHistory } from "./hooks/useHistory";
 import { useMeals } from "./hooks/useMeals";
 import { useNutrionalValuePreferences } from "./hooks/useNutrionalValuePreferences";
 import { useHidingNumbers } from "./hooks/useHidingNumbers";
+import { screenBackgroundColor } from "./constants/layout";
 
 export function App() {
   const isLoadingComplete = useCachedResources();
@@ -27,7 +28,6 @@ export function App() {
           value={{ history, meals, nutrionalValuePreferences, hidingNumbers }}
         >
           <Navigation colorScheme={colorScheme} />
-          <StatusBar barStyle={"dark-content"} backgroundColor="white" />
         </AppContext.Provider>
       </SafeAreaProvider>
     );

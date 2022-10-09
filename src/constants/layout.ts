@@ -22,10 +22,12 @@ export const defaultBorderRadius = 3;
 export const defaultFontSize = 14;
 export const defaultFontFamily = "Azeret-Mono";
 export const endPadding = 100;
+export const firstElementTopMargin = 40;
+export const screenBackgroundColor = sharedColors.gray[1];
 
 export const sharedStyles = StyleSheet.create({
   screenView: {
-    backgroundColor: "#fff",
+    backgroundColor: screenBackgroundColor,
     height: "100%",
   },
   section: {
@@ -46,17 +48,16 @@ export const sharedStyles = StyleSheet.create({
   },
   labelText: {
     display: "flex",
-    fontSize: 12,
+    fontSize: 13,
     marginBottom: 5,
   },
   textInput: {
     display: "flex",
-    borderWidth: 1,
-    borderColor: defaultBorderColor,
     borderRadius: defaultBorderRadius,
-    padding: 7,
+    padding: 9,
     fontSize: defaultFontSize,
     fontFamily: defaultFontFamily,
+    backgroundColor: sharedColors.gray[1],
   },
   button: {
     display: "flex",
@@ -64,8 +65,8 @@ export const sharedStyles = StyleSheet.create({
     width: "100%",
     border: "1px solid black",
     borderRadius: defaultBorderRadius,
-    paddingLeft: 7,
-    paddingRight: 7,
+    paddingLeft: 9,
+    paddingRight: 9,
     paddingTop: 20,
     paddingBottom: 20,
     textAlign: "center",

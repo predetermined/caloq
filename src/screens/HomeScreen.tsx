@@ -5,6 +5,7 @@ import {
   Keyboard,
   ScrollView,
   View,
+  StatusBar,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 
@@ -14,6 +15,8 @@ import {
   defaultBorderRadius,
   defaultFontSize,
   endPadding,
+  firstElementTopMargin,
+  screenBackgroundColor,
   sharedColors,
   sharedStyles,
 } from "../constants/layout";
@@ -33,10 +36,12 @@ const styles = StyleSheet.create({
     paddingRight: 15,
     paddingTop: 11,
     paddingBottom: 11,
-    backgroundColor: sharedColors.gray[1],
+    backgroundColor: sharedColors.gray[0],
     borderTopLeftRadius: defaultBorderRadius,
     borderTopRightRadius: defaultBorderRadius,
     zIndex: -1,
+    elevation: 4,
+    shadowColor: "rgba(0, 0, 0, 0.1)",
   },
   activeTab: {
     backgroundColor: "#dc2626",
@@ -78,7 +83,7 @@ export function getDisplayNumbers(
   }, {} as Record<OptionKey, string>);
 }
 
-export function HomeScreen(_props: RootTabScreenProps<"Home">) {
+export function HomeScreen(props: RootTabScreenProps<"Home">) {
   const { meals, history, nutrionalValuePreferences, hidingNumbers } =
     useContext(AppContext);
 
@@ -157,9 +162,9 @@ export function HomeScreen(_props: RootTabScreenProps<"Home">) {
       <ScrollView
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
+        overScrollMode="never"
         style={{
           ...sharedStyles.screenView,
-          backgroundColor: sharedColors.gray[1],
         }}
       >
         <View
@@ -168,6 +173,7 @@ export function HomeScreen(_props: RootTabScreenProps<"Home">) {
             ...sharedStyles.titleView,
             justifyContent: "flex-end",
             zIndex: 1,
+            marginTop: firstElementTopMargin,
           }}
         >
           <Pressable>
@@ -194,7 +200,7 @@ export function HomeScreen(_props: RootTabScreenProps<"Home">) {
           </Pressable>
         </View>
 
-        <View style={{ marginTop: -30, backgroundColor: "white" }}>
+        <View style={{ marginTop: -30 }}>
           <View
             style={{
               ...sharedStyles.section,
@@ -259,11 +265,11 @@ export function HomeScreen(_props: RootTabScreenProps<"Home">) {
           <View style={sharedStyles.section}>
             <View
               style={{
-                borderWidth: 1,
-                borderColor: defaultBorderColor,
-                padding: 15,
+                padding: 20,
                 borderRadius: defaultBorderRadius,
                 backgroundColor: "white",
+                elevation: 16,
+                shadowColor: "rgba(0, 0, 0, 0.3)",
               }}
             >
               {addManually ? (
@@ -326,9 +332,8 @@ export function HomeScreen(_props: RootTabScreenProps<"Home">) {
                     <View
                       style={{
                         borderRadius: defaultBorderRadius,
-                        borderWidth: 1,
-                        borderColor: defaultBorderColor,
-                        padding: 15,
+                        padding: 20,
+                        backgroundColor: sharedColors.gray[1],
                       }}
                     >
                       {meals.isLoading ? (
@@ -336,25 +341,30 @@ export function HomeScreen(_props: RootTabScreenProps<"Home">) {
                       ) : (
                         <View
                           style={{
-                            height: 40,
+                            height: 38,
                             overflow: "hidden",
                             borderRadius: defaultBorderRadius,
+                            flex: 1,
                           }}
                         >
                           <Picker
                             style={{
-                              paddingLeft: 7,
-                              backgroundColor: sharedColors.gray[2],
-                              fontSize: defaultFontSize,
+                              paddingLeft: 9,
+                              backgroundColor: sharedColors.gray[8],
+                              fontSize: 11,
                               marginTop: -8,
+                              color: "white",
                             }}
-                            dropdownIconColor={sharedColors.gray[4]}
+                            dropdownIconColor={sharedColors.gray[2]}
                             selectedValue={pickerValue}
                             onValueChange={selectMeal}
                           >
                             <Picker.Item
                               label="Choose meal..."
                               value={"NONE"}
+                              style={{
+                                fontSize: defaultFontSize,
+                              }}
                             />
                             {Object.keys(meals.entries).map((mealKey) => {
                               return (
@@ -362,6 +372,9 @@ export function HomeScreen(_props: RootTabScreenProps<"Home">) {
                                   key={mealKey}
                                   label={mealKey}
                                   value={mealKey}
+                                  style={{
+                                    fontSize: defaultFontSize,
+                                  }}
                                 />
                               );
                             })}
@@ -384,6 +397,7 @@ export function HomeScreen(_props: RootTabScreenProps<"Home">) {
                             <StyledText
                               style={{
                                 ...sharedStyles.labelText,
+                                fontSize: 11,
                                 marginRight: 15,
                                 marginBottom: 0,
                                 width: "25%",
@@ -401,6 +415,8 @@ export function HomeScreen(_props: RootTabScreenProps<"Home">) {
                               }
                               style={{
                                 ...sharedStyles.textInput,
+                                backgroundColor: "white",
+                                fontSize: 12,
                                 width: "65%",
                               }}
                               placeholder="0"
@@ -464,32 +480,12 @@ export function HomeScreen(_props: RootTabScreenProps<"Home">) {
 
           <View
             style={{
-              marginTop: 30,
-              transform: [{ rotate: "4deg" }],
-              backgroundColor: sharedColors.gray[0],
-              height: 40,
-              width: "120%",
-              marginLeft: -20,
-              marginBottom: -15,
-              zIndex: -1,
-            }}
-          />
-
-          <View
-            style={{
               ...sharedStyles.section,
-              backgroundColor: sharedColors.gray[0],
               paddingBottom: endPadding,
             }}
           >
             {history.today.entries.map((entry) => {
-              return (
-                <HistoryEntry
-                  key={entry.dateIso}
-                  entry={entry}
-                  style={{ backgroundColor: "rgba(255, 255, 255, 0.5)" }}
-                />
-              );
+              return <HistoryEntry key={entry.dateIso} entry={entry} />;
             })}
           </View>
         </View>
