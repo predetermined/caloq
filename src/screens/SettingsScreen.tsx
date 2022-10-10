@@ -119,7 +119,7 @@ export function SettingsScreen() {
         ToastAndroid.BOTTOM
       );
     } catch (e) {
-      console.log(e);
+      console.debug("SettingsScreen: Failed to import data: ", e);
       ToastAndroid.show("Failed to import.", ToastAndroid.BOTTOM);
     }
   }
