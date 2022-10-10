@@ -1,7 +1,7 @@
 import { createContext } from "react";
 import { useHidingNumbers } from "../hooks/useHidingNumbers";
-import { HistoryEntry, useHistory } from "../hooks/useHistory";
-import { Meal, useMeals } from "../hooks/useMeals";
+import { useHistory } from "../hooks/useHistory";
+import { useMeals } from "../hooks/useMeals";
 import { useNutrionalValuePreferences } from "../hooks/useNutrionalValuePreferences";
 
 export interface IAppContext {

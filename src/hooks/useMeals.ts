@@ -7,7 +7,6 @@ export type Meal = Record<OptionKey, number>;
 export type MealAsObject = { name: string } & Meal;
 
 export function useMeals() {
-  const [isLoading, setIsLoading] = useState(true);
   const [entries, setEntries] = useState<Record<string, Meal>>({
     Oatmeal: { kcal: 372, protein: 14, sugar: 1, fat: 7, fiber: 10, carbs: 59 },
   });
@@ -17,17 +16,12 @@ export function useMeals() {
   }, []);
 
   async function loadEntries() {
-    setIsLoading(false);
     try {
       const mealsString = await AsyncStorage.getItem("meals");
-
       if (!mealsString) return;
 
       setEntries(JSON.parse(mealsString));
-    } catch {
-    } finally {
-      setIsLoading(false);
-    }
+    } catch {}
   }
 
   async function add(meal: MealAsObject) {
@@ -89,7 +83,6 @@ export function useMeals() {
     add,
     addMany,
     remove,
-    reload: loadEntries,
     moveUpInOrder,
   };
 }

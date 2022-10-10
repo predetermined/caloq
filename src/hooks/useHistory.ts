@@ -39,6 +39,7 @@ export function getNextSundayDate(from = new Date()) {
 }
 
 export function useHistory() {
+  // Sorted ASC by date
   const [entries, setEntries] = useState<HistoryEntry[]>([]);
 
   useEffect(() => {
@@ -61,9 +62,7 @@ export function useHistory() {
             : -1
         )
       );
-    } catch (e) {
-      console.log(e);
-    }
+    } catch {}
   }
 
   const today = useMemo(() => {
@@ -152,18 +151,12 @@ export function useHistory() {
     await loadEntries();
   }
 
-  async function addMany(
-    newEntries: HistoryEntry[],
-    { shouldSort }: { shouldSort?: boolean } = {}
-  ) {
+  async function addMany(newEntries: HistoryEntry[]) {
     try {
-      let insert = [...entries, ...newEntries];
-
-      if (shouldSort) {
-        insert = insert.sort((e1, e2) => (e1.dateIso < e2.dateIso ? -1 : 1));
-      }
-
-      await AsyncStorage.setItem("history", JSON.stringify(insert));
+      await AsyncStorage.setItem(
+        "history",
+        JSON.stringify([...entries, ...newEntries])
+      );
     } catch {}
     await loadEntries();
   }
@@ -184,7 +177,6 @@ export function useHistory() {
     entries,
     today,
     comparisonPeriods,
-    reload: loadEntries,
     add,
     addMany,
     remove,

@@ -1,5 +1,5 @@
 import { useContext, useMemo, useRef, useState } from "react";
-import { ScrollView, StatusBar, View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { entryTopMargin } from "../components/Entry";
 import { HistoryEntry } from "../components/HistoryEntry";
 import { StyledText } from "../components/StyledText";
@@ -10,7 +10,6 @@ import {
   defaultBorderRadius,
   defaultBorderColor,
   firstElementTopMargin,
-  screenBackgroundColor,
 } from "../constants/layout";
 import { AppContext } from "../contexts/appContext";
 import { OPTIONS } from "../hooks/useNutrionalValuePreferences";

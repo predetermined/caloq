@@ -1,11 +1,5 @@
 import { useContext } from "react";
-import {
-  Pressable,
-  ScrollView,
-  View,
-  ToastAndroid,
-  StatusBar,
-} from "react-native";
+import { Pressable, ScrollView, View, ToastAndroid } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { StyledText } from "../components/StyledText";
 import {
@@ -13,7 +7,6 @@ import {
   defaultFontFamily,
   defaultFontSize,
   firstElementTopMargin,
-  screenBackgroundColor,
   sharedColors,
   sharedStyles,
 } from "../constants/layout";
@@ -118,7 +111,7 @@ export function SettingsScreen() {
 
         historyEntriesToInsert.push(importHistoryEntry);
       }
-      history.addMany(historyEntriesToInsert, { shouldSort: true });
+      history.addMany(historyEntriesToInsert);
 
       ToastAndroid.showWithGravity(
         `Imported ${historyEntriesToInsert.length} new history entries and new ${mealEntriesToAdd.length} meals.`,

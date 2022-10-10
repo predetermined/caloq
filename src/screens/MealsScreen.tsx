@@ -1,10 +1,9 @@
 import { useContext, useState } from "react";
-import { Keyboard, Pressable, ScrollView, StatusBar, View } from "react-native";
-import { DefaultEntry, entryTopMargin } from "../components/Entry";
+import { Keyboard, Pressable, ScrollView, View } from "react-native";
+import { DefaultEntry } from "../components/Entry";
 import { StyledText } from "../components/StyledText";
 import { StyledTextInput } from "../components/StyledTextInput";
 import {
-  defaultBorderColor,
   defaultBorderRadius,
   defaultFontSize,
   endPadding,

@@ -1,22 +1,19 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useMemo, useState } from "react";
 import {
   StyleSheet,
   Pressable,
   Keyboard,
   ScrollView,
   View,
-  StatusBar,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 
 import { StyledText } from "../components/StyledText";
 import {
-  defaultBorderColor,
   defaultBorderRadius,
   defaultFontSize,
   endPadding,
   firstElementTopMargin,
-  screenBackgroundColor,
   sharedColors,
   sharedStyles,
 } from "../constants/layout";

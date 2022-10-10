@@ -1,10 +1,6 @@
 import { PropsWithChildren, ReactNode } from "react";
-import { View, ViewProps, ViewStyle } from "react-native";
-import {
-  defaultBorderColor,
-  defaultBorderRadius,
-  sharedColors,
-} from "../constants/layout";
+import { View, ViewStyle } from "react-native";
+import { defaultBorderRadius, sharedColors } from "../constants/layout";
 import { StyledText } from "./StyledText";
 
 export const entryTopMargin = 10;
