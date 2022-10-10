@@ -1,4 +1,4 @@
-import { useContext, useMemo } from "react";
+import { useContext, useMemo, useRef, useState } from "react";
 import { ScrollView, StatusBar, View } from "react-native";
 import { entryTopMargin } from "../components/Entry";
 import { HistoryEntry } from "../components/HistoryEntry";
@@ -19,6 +19,8 @@ import { calculateSum } from "../lib/calculateSum";
 export function HistoryScreen() {
   const { history, nutrionalValuePreferences, hidingNumbers } =
     useContext(AppContext);
+  const [amountOfLoadedDays, setAmountOfLoadedDays] = useState(3);
+  const setAlreadyLoadedMoreDaysForContentSizeRef = useRef(new Set<number>());
 
   const historyGroupedByDate = useMemo(() => {
     return history.entries.reduce((groups, entry) => {
@@ -39,6 +41,31 @@ export function HistoryScreen() {
         style={{
           ...sharedStyles.screenView,
           ...sharedStyles.section,
+        }}
+        onScroll={(e) => {
+          if (
+            e.nativeEvent.contentOffset.y +
+              e.nativeEvent.layoutMeasurement.height <
+            e.nativeEvent.contentSize.height -
+              e.nativeEvent.layoutMeasurement.height -
+              1000
+          ) {
+            return;
+          }
+
+          if (
+            setAlreadyLoadedMoreDaysForContentSizeRef.current.has(
+              e.nativeEvent.contentSize.height
+            )
+          ) {
+            return;
+          }
+
+          console.debug("HistoryScreen: loaded more entries");
+          setAlreadyLoadedMoreDaysForContentSizeRef.current.add(
+            e.nativeEvent.contentSize.height
+          );
+          setAmountOfLoadedDays(amountOfLoadedDays + 3);
         }}
       >
         <View
@@ -123,7 +150,7 @@ export function HistoryScreen() {
 
           <View style={{ paddingBottom: endPadding }}>
             {Object.keys(historyGroupedByDate)
-              .slice(0, 7)
+              .slice(0, amountOfLoadedDays)
               .map((date, i) => {
                 const entries = historyGroupedByDate[date];
                 const sum = calculateSum(entries);
