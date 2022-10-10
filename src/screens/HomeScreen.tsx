@@ -333,51 +333,47 @@ export function HomeScreen(props: RootTabScreenProps<"Home">) {
                         backgroundColor: sharedColors.gray[1],
                       }}
                     >
-                      {meals.isLoading ? (
-                        <StyledText>Loading...</StyledText>
-                      ) : (
-                        <View
+                      <View
+                        style={{
+                          height: 38,
+                          overflow: "hidden",
+                          borderRadius: defaultBorderRadius,
+                          flex: 1,
+                        }}
+                      >
+                        <Picker
                           style={{
-                            height: 38,
-                            overflow: "hidden",
-                            borderRadius: defaultBorderRadius,
-                            flex: 1,
+                            paddingLeft: 9,
+                            backgroundColor: sharedColors.gray[8],
+                            fontSize: 11,
+                            marginTop: -8,
+                            color: "white",
                           }}
+                          dropdownIconColor={sharedColors.gray[2]}
+                          selectedValue={pickerValue}
+                          onValueChange={selectMeal}
                         >
-                          <Picker
+                          <Picker.Item
+                            label="Choose meal..."
+                            value={"NONE"}
                             style={{
-                              paddingLeft: 9,
-                              backgroundColor: sharedColors.gray[8],
-                              fontSize: 11,
-                              marginTop: -8,
-                              color: "white",
+                              fontSize: defaultFontSize,
                             }}
-                            dropdownIconColor={sharedColors.gray[2]}
-                            selectedValue={pickerValue}
-                            onValueChange={selectMeal}
-                          >
-                            <Picker.Item
-                              label="Choose meal..."
-                              value={"NONE"}
-                              style={{
-                                fontSize: defaultFontSize,
-                              }}
-                            />
-                            {Object.keys(meals.entries).map((mealKey) => {
-                              return (
-                                <Picker.Item
-                                  key={mealKey}
-                                  label={mealKey}
-                                  value={mealKey}
-                                  style={{
-                                    fontSize: defaultFontSize,
-                                  }}
-                                />
-                              );
-                            })}
-                          </Picker>
-                        </View>
-                      )}
+                          />
+                          {Object.keys(meals.entries).map((mealKey) => {
+                            return (
+                              <Picker.Item
+                                key={mealKey}
+                                label={mealKey}
+                                value={mealKey}
+                                style={{
+                                  fontSize: defaultFontSize,
+                                }}
+                              />
+                            );
+                          })}
+                        </Picker>
+                      </View>
 
                       {nutrionalValuePreferences.enabledValues.map((key) => {
                         return (

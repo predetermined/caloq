@@ -1,5 +1,5 @@
 import { useContext, useMemo, useRef, useState } from "react";
-import { ScrollView, View } from "react-native";
+import { Dimensions, ScrollView, View } from "react-native";
 import { entryTopMargin } from "../components/Entry";
 import { HistoryEntry } from "../components/HistoryEntry";
 import { StyledText } from "../components/StyledText";
@@ -41,6 +41,19 @@ export function HistoryScreen() {
           ...sharedStyles.screenView,
           ...sharedStyles.section,
         }}
+        onLayout={(e) => {
+          const favorableOffset = 100;
+
+          if (
+            e.nativeEvent.layout.height - favorableOffset >
+            Dimensions.get("screen").height
+          ) {
+            return;
+          }
+
+          console.debug("HistoryScreen: loaded more entries on layout");
+          setAmountOfLoadedDays(amountOfLoadedDays + 3);
+        }}
         onScroll={(e) => {
           if (
             e.nativeEvent.contentOffset.y +
@@ -60,7 +73,7 @@ export function HistoryScreen() {
             return;
           }
 
-          console.debug("HistoryScreen: loaded more entries");
+          console.debug("HistoryScreen: loaded more entries on scroll");
           setAlreadyLoadedMoreDaysForContentSizeRef.current.add(
             e.nativeEvent.contentSize.height
           );

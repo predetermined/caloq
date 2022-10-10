@@ -78,7 +78,6 @@ export function useMeals() {
   }
 
   return {
-    isLoading,
     entries,
     add,
     addMany,
