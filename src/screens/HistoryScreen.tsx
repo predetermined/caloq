@@ -83,7 +83,7 @@ export function HistoryScreen() {
         <View
           style={{
             ...sharedStyles.section,
-            marginBottom: 15,
+            marginBottom: 20,
             display: "flex",
             flexDirection: "row",
             justifyContent: "center",
@@ -173,7 +173,7 @@ export function HistoryScreen() {
                       style={{
                         fontSize: 20,
                         marginBottom: 5,
-                        marginTop: i === 0 ? 0 : 15,
+                        marginTop: i === 0 ? 0 : 20,
                       }}
                     >
                       {date}

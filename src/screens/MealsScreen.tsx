@@ -130,7 +130,7 @@ export function MealsScreen() {
           style={{
             ...sharedStyles.section,
             paddingBottom: endPadding,
-            marginTop: 5,
+            marginTop: 10,
           }}
         >
           {Object.keys(meals.entries).map((mealKey, i) => {

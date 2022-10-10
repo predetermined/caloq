@@ -203,7 +203,7 @@ function BottomTabNavigator() {
                         color: "white",
                         padding: 10,
                         textAlign: "center",
-                        backgroundColor: sharedColors.gray[8],
+                        backgroundColor: sharedColors.gray[9],
                         borderRadius: 5,
                         elevation: 10,
                       }}

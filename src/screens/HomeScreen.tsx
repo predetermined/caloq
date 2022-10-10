@@ -331,6 +331,8 @@ export function HomeScreen(props: RootTabScreenProps<"Home">) {
                         borderRadius: defaultBorderRadius,
                         padding: 20,
                         backgroundColor: sharedColors.gray[1],
+                        borderWidth: 0.75,
+                        borderColor: sharedColors.gray[2],
                       }}
                     >
                       <View
@@ -343,8 +345,8 @@ export function HomeScreen(props: RootTabScreenProps<"Home">) {
                       >
                         <Picker
                           style={{
-                            paddingLeft: 9,
-                            backgroundColor: sharedColors.gray[8],
+                            paddingLeft: 8,
+                            backgroundColor: sharedColors.gray[9],
                             fontSize: 11,
                             marginTop: -8,
                             color: "white",
@@ -475,7 +477,7 @@ export function HomeScreen(props: RootTabScreenProps<"Home">) {
             style={{
               ...sharedStyles.section,
               paddingBottom: endPadding,
-              marginTop: 5,
+              marginTop: 10,
             }}
           >
             {history.today.entries.map((entry) => {

@@ -1,10 +1,11 @@
 import { StyleSheet } from "react-native";
 
 export const sharedColors = {
-  // 50, 100, 200, ..., 900
+  // 50, 100, (150,) 200, ..., 900
   gray: [
     "#fafafa",
     "#f5f5f5",
+    "#efefef",
     "#e5e5e5",
     "#d4d4d4",
     "#a3a3a3",
@@ -15,7 +16,7 @@ export const sharedColors = {
     "#171717",
   ],
   red: "#dc2626",
-};
+} as const;
 
 export const defaultBorderColor = "#ededed";
 export const defaultBorderRadius = 3;
@@ -54,10 +55,12 @@ export const sharedStyles = StyleSheet.create({
   textInput: {
     display: "flex",
     borderRadius: defaultBorderRadius,
-    padding: 9,
+    padding: 8,
     fontSize: defaultFontSize,
     fontFamily: defaultFontFamily,
     backgroundColor: sharedColors.gray[1],
+    borderWidth: 0.75,
+    borderColor: sharedColors.gray[2],
   },
   button: {
     display: "flex",

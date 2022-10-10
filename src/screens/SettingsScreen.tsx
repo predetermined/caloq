@@ -181,7 +181,7 @@ export function SettingsScreen() {
           })}
         </View>
 
-        <View style={{ marginTop: 15 }}>
+        <View style={{ marginTop: 20 }}>
           <StyledText
             style={{
               fontSize: 20,
@@ -215,7 +215,7 @@ export function SettingsScreen() {
           />
         </View>
 
-        <View style={{ marginTop: 15 }}>
+        <View style={{ marginTop: 20 }}>
           <StyledText
             style={{
               fontSize: 20,
@@ -228,7 +228,7 @@ export function SettingsScreen() {
           <Pressable
             style={{
               padding: 15,
-              backgroundColor: sharedColors.gray[7],
+              backgroundColor: sharedColors.gray[8],
               borderRadius: defaultBorderRadius,
               marginBottom: 5,
             }}
