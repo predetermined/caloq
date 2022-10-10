@@ -482,6 +482,7 @@ export function HomeScreen(props: RootTabScreenProps<"Home">) {
             style={{
               ...sharedStyles.section,
               paddingBottom: endPadding,
+              marginTop: 5,
             }}
           >
             {history.today.entries.map((entry) => {

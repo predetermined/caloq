@@ -188,7 +188,7 @@ export function SettingsScreen() {
           })}
         </View>
 
-        <View style={{ marginTop: 25 }}>
+        <View style={{ marginTop: 15 }}>
           <StyledText
             style={{
               fontSize: 20,
@@ -222,7 +222,7 @@ export function SettingsScreen() {
           />
         </View>
 
-        <View style={{ marginTop: 25 }}>
+        <View style={{ marginTop: 15 }}>
           <StyledText
             style={{
               fontSize: 20,
