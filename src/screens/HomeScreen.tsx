@@ -329,29 +329,29 @@ export function HomeScreen(props: RootTabScreenProps<"Home">) {
                     <View
                       style={{
                         borderRadius: defaultBorderRadius,
-                        padding: 20,
-                        backgroundColor: sharedColors.gray[1],
-                        borderWidth: 0.75,
-                        borderColor: sharedColors.gray[2],
                       }}
                     >
                       <View
                         style={{
-                          height: 38,
+                          height: 44,
                           overflow: "hidden",
                           borderRadius: defaultBorderRadius,
                           flex: 1,
+                          borderWidth: 0.75,
+                          borderColor: sharedColors.gray[2],
+                          paddingTop: 3,
                         }}
                       >
                         <Picker
                           style={{
                             paddingLeft: 8,
-                            backgroundColor: sharedColors.gray[9],
+                            backgroundColor: sharedColors.gray[1],
                             fontSize: 11,
                             marginTop: -8,
-                            color: "white",
+                            marginRight: -10,
                           }}
-                          dropdownIconColor={sharedColors.gray[2]}
+                          dropdownIconColor={sharedColors.gray[5]}
+                          dropdownIconRippleColor="transparent"
                           selectedValue={pickerValue}
                           onValueChange={selectMeal}
                         >
@@ -410,7 +410,6 @@ export function HomeScreen(props: RootTabScreenProps<"Home">) {
                               }
                               style={{
                                 ...sharedStyles.textInput,
-                                backgroundColor: "white",
                                 fontSize: 12,
                                 width: "65%",
                               }}
