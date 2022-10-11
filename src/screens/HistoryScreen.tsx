@@ -14,6 +14,7 @@ import {
 import { AppContext } from "../contexts/appContext";
 import { OPTIONS } from "../hooks/useNutrionalValuePreferences";
 import { calculateSum } from "../lib/calculateSum";
+import { LineChart, Grid, YAxis, XAxis } from "react-native-svg-charts";
 
 export function HistoryScreen() {
   const { history, nutrionalValuePreferences, hidingNumbers } =
@@ -32,6 +33,21 @@ export function HistoryScreen() {
     }, {} as Record<string, typeof history["entries"]>);
   }, [history.entries]);
 
+  const chartData = useMemo(() => {
+    const entries = Object.entries(historyGroupedByDate).slice(0, 30);
+
+    return {
+      dates: entries.map(([date]) => date).reverse(),
+      sums: entries
+        .map(([, entries]) => {
+          return entries.reduce((sum, entry) => {
+            return sum + entry.kcal;
+          }, 0);
+        })
+        .reverse(),
+    };
+  }, [historyGroupedByDate]);
+
   return (
     <>
       <ScrollView
@@ -39,7 +55,6 @@ export function HistoryScreen() {
         overScrollMode="never"
         style={{
           ...sharedStyles.screenView,
-          ...sharedStyles.section,
         }}
         onLayout={(e) => {
           const favorableOffset = 100;
@@ -82,80 +97,135 @@ export function HistoryScreen() {
       >
         <View
           style={{
-            ...sharedStyles.section,
-            marginBottom: 20,
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-            backgroundColor: sharedColors.gray[9],
-            padding: 20,
+            backgroundColor: "white",
             borderRadius: defaultBorderRadius,
             elevation: 16,
             shadowColor: "rgba(0, 0, 0, 0.3)",
-            marginTop: firstElementTopMargin,
+            marginBottom: 20,
+            overflow: "hidden",
+            paddingTop: firstElementTopMargin,
+            borderBottomRightRadius: 20,
+            borderBottomLeftRadius: 20,
           }}
         >
           <View
             style={{
-              width: "50%",
-              borderRadius: defaultBorderRadius,
-              marginRight: 5,
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              padding: 20,
             }}
           >
-            <StyledText
+            <View
               style={{
-                fontSize: 11,
-                textAlign: "center",
-                marginBottom: 5,
-                fontFamily: "Azeret-Mono-Italic",
-                color: "white",
+                width: "50%",
+                borderRadius: defaultBorderRadius,
+                marginRight: 5,
               }}
             >
-              Last 30 days avg.
-            </StyledText>
-            <StyledText
+              <StyledText
+                style={{
+                  fontSize: 11,
+                  textAlign: "center",
+                  marginBottom: 5,
+                  fontFamily: "Azeret-Mono-Italic",
+                  color: sharedColors.gray[6],
+                }}
+              >
+                Last 30 days avg.
+              </StyledText>
+              <StyledText
+                style={{
+                  textAlign: "center",
+                  fontSize: 18,
+                }}
+              >
+                {Math.round(history.comparisonPeriods.last30Days.avg.kcal)} kcal
+              </StyledText>
+            </View>
+
+            <View
               style={{
-                textAlign: "center",
-                fontSize: 18,
-                color: "white",
+                width: "50%",
+                borderColor: defaultBorderColor,
+                borderRadius: defaultBorderRadius,
+                marginLeft: 5,
               }}
             >
-              {Math.round(history.comparisonPeriods.last30Days.avg.kcal)} kcal
-            </StyledText>
+              <StyledText
+                style={{
+                  fontSize: 11,
+                  textAlign: "center",
+                  marginBottom: 5,
+                  fontFamily: "Azeret-Mono-Italic",
+                  color: sharedColors.gray[6],
+                }}
+              >
+                Last 7 days avg.
+              </StyledText>
+              <StyledText
+                style={{
+                  textAlign: "center",
+                  fontSize: 18,
+                }}
+              >
+                {Math.round(history.comparisonPeriods.last7Days.avg.kcal)} kcal
+              </StyledText>
+            </View>
           </View>
 
-          <View
-            style={{
-              width: "50%",
-              borderColor: defaultBorderColor,
-              borderRadius: defaultBorderRadius,
-              marginLeft: 5,
-            }}
-          >
-            <StyledText
-              style={{
-                fontSize: 11,
-                textAlign: "center",
-                marginBottom: 5,
-                fontFamily: "Azeret-Mono-Italic",
-                color: "white",
-              }}
-            >
-              Last 7 days avg.
-            </StyledText>
-            <StyledText
-              style={{
-                textAlign: "center",
-                fontSize: 18,
-                color: "white",
-              }}
-            >
-              {Math.round(history.comparisonPeriods.last7Days.avg.kcal)} kcal
-            </StyledText>
-          </View>
+          {chartData.sums.length >= 7 ? (
+            <View style={{ padding: 20 }}>
+              <View style={{ flexDirection: "row" }}>
+                <YAxis
+                  data={chartData.sums}
+                  svg={{
+                    fill: sharedColors.gray[5],
+                    fontSize: 11,
+                  }}
+                  contentInset={{ top: 5, bottom: 5 }}
+                  numberOfTicks={4}
+                />
+
+                <LineChart
+                  style={{
+                    height: 150,
+                    width: "100%",
+                    paddingRight: 20,
+                    paddingLeft: 5,
+                  }}
+                  contentInset={{ top: 5, left: 10, bottom: 5 }}
+                  data={chartData.sums}
+                  svg={{ stroke: sharedColors.gray[6] }}
+                >
+                  <Grid
+                    svg={{
+                      stroke: sharedColors.gray[3],
+                    }}
+                  />
+                </LineChart>
+              </View>
+
+              <XAxis
+                data={chartData.sums}
+                formatLabel={(value, i) => {
+                  if (chartData.sums.length >= 12) {
+                    if (i % 5 !== 0) return "";
+                  } else if (chartData.sums.length >= 7) {
+                    if (i % 2 !== 0) return "";
+                  }
+
+                  return chartData.dates[value].slice(0, -3);
+                }}
+                contentInset={{ left: 45, right: 15 }}
+                svg={{ fontSize: 11, fill: sharedColors.gray[5] }}
+                style={{ paddingTop: 10 }}
+              />
+            </View>
+          ) : null}
         </View>
 
-        <View>
+        <View style={sharedStyles.section}>
           {history.entries.length === 0 ? (
             <StyledText>Nothing here yet. Keep going!</StyledText>
           ) : null}

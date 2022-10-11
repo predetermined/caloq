@@ -127,7 +127,9 @@ function BottomTabNavigator() {
             <StatusBar
               barStyle={"dark-content"}
               backgroundColor={
-                activeRouteName === "Meals" ? "white" : screenBackgroundColor
+                activeRouteName === "Meals" || activeRouteName === "History"
+                  ? "white"
+                  : screenBackgroundColor
               }
             />
             <View
