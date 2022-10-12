@@ -10,6 +10,7 @@ import {
   defaultBorderRadius,
   defaultBorderColor,
   firstElementTopMargin,
+  defaultFontFamily,
 } from "../constants/layout";
 import { AppContext } from "../contexts/appContext";
 import { OPTIONS } from "../hooks/useNutrionalValuePreferences";
@@ -175,13 +176,25 @@ export function HistoryScreen() {
           </View>
 
           {chartData.sums.length >= 7 ? (
-            <View style={{ padding: 20 }}>
-              <View style={{ flexDirection: "row" }}>
+            <View
+              style={{
+                padding: 20,
+                // height + padding * 2 + XAxis font size * XAxis line height + Xaxis top padding
+                height: 150 + 20 * 2 + 11 * 1.4 + 10,
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  height: 150,
+                }}
+              >
                 <YAxis
                   data={chartData.sums}
                   svg={{
                     fill: sharedColors.gray[5],
                     fontSize: 11,
+                    fontFamily: defaultFontFamily,
                   }}
                   contentInset={{ top: 5, bottom: 5 }}
                   numberOfTicks={4}
@@ -189,7 +202,7 @@ export function HistoryScreen() {
 
                 <LineChart
                   style={{
-                    height: 150,
+                    height: "100%",
                     width: "100%",
                     paddingRight: 20,
                     paddingLeft: 5,
@@ -218,8 +231,14 @@ export function HistoryScreen() {
                   return chartData.dates[value].slice(0, -3);
                 }}
                 contentInset={{ left: 45, right: 15 }}
-                svg={{ fontSize: 11, fill: sharedColors.gray[5] }}
-                style={{ paddingTop: 10 }}
+                svg={{
+                  fontSize: 11,
+                  fill: sharedColors.gray[5],
+                  fontFamily: defaultFontFamily,
+                }}
+                style={{
+                  paddingTop: 10,
+                }}
               />
             </View>
           ) : null}
