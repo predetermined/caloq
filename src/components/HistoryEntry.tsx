@@ -33,7 +33,7 @@ export function HistoryEntry({
 
   return (
     <DefaultEntry
-      title={new Date(entry.dateIso).toLocaleString()}
+      title={new Date(entry.dateIso).toLocaleTimeString()}
       content={content}
       actions={
         <Pressable

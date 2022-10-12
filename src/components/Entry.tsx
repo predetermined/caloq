@@ -52,7 +52,7 @@ export function DefaultEntry({
       <View style={{ display: "flex", flexDirection: "row" }}>
         {prefix ? <View style={{ marginRight: 15 }}>{prefix}</View> : null}
         <View>
-          <StyledText style={{ color: sharedColors.gray[4], fontSize: 12 }}>
+          <StyledText style={{ color: sharedColors.gray[6] }}>
             {title}
           </StyledText>
 
