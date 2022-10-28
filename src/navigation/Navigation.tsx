@@ -210,7 +210,7 @@ function BottomTabNavigator() {
                         elevation: 10,
                       }}
                     >
-                      New entry
+                      New{"\n"}entry
                     </StyledText>
                   </Pressable>
                 </View>
