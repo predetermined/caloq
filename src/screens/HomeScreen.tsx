@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import {
   StyleSheet,
   Pressable,
@@ -26,6 +26,8 @@ import {
   OptionKey,
   OPTIONS,
 } from "../hooks/useNutrionalValuePreferences";
+import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
 
 const styles = StyleSheet.create({
   tab: {
@@ -81,8 +83,14 @@ export function getDisplayNumbers(
 }
 
 export function HomeScreen(props: RootTabScreenProps<"Home">) {
-  const { meals, history, nutrionalValuePreferences, hidingNumbers } =
-    useContext(AppContext);
+  const {
+    meals,
+    history,
+    nutrionalValuePreferences,
+    hidingNumbers,
+    behavioralSettings,
+  } = useContext(AppContext);
+  const navigation = useNavigation();
 
   const [addManually, setAddManually] = useState(false);
   const [grams, setGrams] = useState("");
@@ -90,6 +98,10 @@ export function HomeScreen(props: RootTabScreenProps<"Home">) {
     Record<OptionKey, string>
   >(EMPTY_NUTRIONAL_VALUES_STRINGS);
   const [pickerValue, setPickerValue] = useState("NONE");
+  const [
+    didAlreadyConfirmWarningContinue,
+    setDidAlreadyConfirmWarningContinue,
+  ] = useState(false);
 
   function resetValues() {
     setNutrionalValues(EMPTY_NUTRIONAL_VALUES_STRINGS);
@@ -153,6 +165,18 @@ export function HomeScreen(props: RootTabScreenProps<"Home">) {
   const displayNumbers = useMemo(() => {
     return getDisplayNumbers(history.today.sum);
   }, [history.today.sum]);
+
+  const shouldShowWarning = useMemo(() => {
+    return (
+      !didAlreadyConfirmWarningContinue &&
+      behavioralSettings.warnAfterKcalPerDay &&
+      history.today.sum.kcal >= behavioralSettings.warnAfterKcalPerDay
+    );
+  }, [
+    didAlreadyConfirmWarningContinue,
+    behavioralSettings.warnAfterKcalPerDay,
+    history.today.sum.kcal,
+  ]);
 
   return (
     <>
@@ -267,8 +291,65 @@ export function HomeScreen(props: RootTabScreenProps<"Home">) {
                 backgroundColor: "white",
                 elevation: 16,
                 shadowColor: "rgba(0, 0, 0, 0.3)",
+                overflow: "hidden",
               }}
             >
+              {shouldShowWarning ? (
+                <View
+                  style={{
+                    padding: 20,
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: "white",
+                    justifyContent: "center",
+                    zIndex: 1,
+                    overflow: "hidden",
+                  }}
+                >
+                  <View>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        marginBottom: 15,
+                      }}
+                    >
+                      <Ionicons
+                        style={{ color: sharedColors.red }}
+                        size={48}
+                        name="warning"
+                      />
+
+                      <StyledText
+                        style={{
+                          marginLeft: 15,
+                          fontSize: 16,
+                          lineHeight: 22,
+                          flex: 1,
+                        }}
+                      >
+                        You reached your set warning value. Are you sure you
+                        would like to continue?
+                      </StyledText>
+                    </View>
+
+                    <Pressable
+                      style={{ ...sharedStyles.button }}
+                      onPress={() => setDidAlreadyConfirmWarningContinue(true)}
+                    >
+                      <StyledText
+                        style={{ textAlign: "center", color: "white" }}
+                      >
+                        Continue anyway
+                      </StyledText>
+                    </Pressable>
+                  </View>
+                </View>
+              ) : null}
+
               {addManually ? (
                 <>
                   {nutrionalValuePreferences.enabledValues.map((key, i) => {

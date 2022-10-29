@@ -8,6 +8,7 @@ import { useHistory } from "./hooks/useHistory";
 import { useMeals } from "./hooks/useMeals";
 import { useNutrionalValuePreferences } from "./hooks/useNutrionalValuePreferences";
 import { useHidingNumbers } from "./hooks/useHidingNumbers";
+import { useBehaviouralSettings } from "./hooks/useBehaviouralSettings";
 
 export function App() {
   const isLoadingComplete = useCachedResources();
@@ -16,6 +17,7 @@ export function App() {
   const meals = useMeals();
   const nutrionalValuePreferences = useNutrionalValuePreferences();
   const hidingNumbers = useHidingNumbers();
+  const behavioralSettings = useBehaviouralSettings();
 
   if (!isLoadingComplete) {
     return null;
@@ -23,7 +25,13 @@ export function App() {
     return (
       <SafeAreaProvider style={{ paddingTop: 0 }}>
         <AppContext.Provider
-          value={{ history, meals, nutrionalValuePreferences, hidingNumbers }}
+          value={{
+            history,
+            meals,
+            nutrionalValuePreferences,
+            hidingNumbers,
+            behavioralSettings,
+          }}
         >
           <Navigation colorScheme={colorScheme} />
         </AppContext.Provider>

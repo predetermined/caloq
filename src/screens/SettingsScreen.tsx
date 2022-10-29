@@ -16,10 +16,16 @@ import * as FileSystem from "expo-file-system";
 import * as DocumentPicker from "expo-document-picker";
 import { HistoryEntry, uniqifyEntry } from "../hooks/useHistory";
 import { Meal, MealAsObject } from "../hooks/useMeals";
+import { StyledTextInput } from "../components/StyledTextInput";
 
 export function SettingsScreen() {
-  const { history, meals, nutrionalValuePreferences, hidingNumbers } =
-    useContext(AppContext);
+  const {
+    history,
+    meals,
+    nutrionalValuePreferences,
+    hidingNumbers,
+    behavioralSettings,
+  } = useContext(AppContext);
 
   async function exportData() {
     const status =
@@ -138,7 +144,7 @@ export function SettingsScreen() {
               marginBottom: 15,
             }}
           >
-            Nutrional values to display
+            Nutrional values{"\n"}to display
           </StyledText>
 
           {Object.entries(OPTIONS).map(([_key, option], i) => {
@@ -149,8 +155,8 @@ export function SettingsScreen() {
                 key={key}
                 innerIconStyle={{
                   borderRadius: defaultBorderRadius,
-                  borderColor: sharedColors.gray[1],
-                  borderWidth: 0,
+                  borderColor: sharedColors.gray[3],
+                  borderWidth: 0.75,
                 }}
                 textStyle={{
                   textDecorationLine: "none",
@@ -160,7 +166,7 @@ export function SettingsScreen() {
                 }}
                 bounceEffectIn={0.9}
                 fillColor={sharedColors.red}
-                unfillColor={sharedColors.gray[3]}
+                unfillColor={sharedColors.gray[2]}
                 iconStyle={{ borderRadius: defaultBorderRadius }}
                 text={option.label}
                 style={{
@@ -194,8 +200,8 @@ export function SettingsScreen() {
           <BouncyCheckbox
             innerIconStyle={{
               borderRadius: defaultBorderRadius,
-              borderColor: sharedColors.gray[1],
-              borderWidth: 0,
+              borderColor: sharedColors.gray[3],
+              borderWidth: 0.75,
             }}
             textStyle={{
               textDecorationLine: "none",
@@ -205,13 +211,48 @@ export function SettingsScreen() {
             }}
             bounceEffectIn={0.9}
             fillColor={sharedColors.red}
-            unfillColor={sharedColors.gray[3]}
+            unfillColor={sharedColors.gray[2]}
             iconStyle={{ borderRadius: defaultBorderRadius }}
             text="Hide numbers"
             isChecked={hidingNumbers.isHiding}
             onPress={() => {
               hidingNumbers.toggle();
             }}
+          />
+        </View>
+
+        <View style={{ marginTop: 20 }}>
+          <StyledText
+            style={{
+              fontSize: 20,
+              marginBottom: 15,
+            }}
+          >
+            Behaviour
+          </StyledText>
+
+          <StyledText
+            style={{
+              fontSize: 16,
+              marginBottom: 10,
+            }}
+          >
+            Warn after kcal/day
+          </StyledText>
+
+          <StyledTextInput
+            value={String(behavioralSettings.warnAfterKcalPerDay || "")}
+            onChangeText={(value) => {
+              const n = Number(value) || null;
+              behavioralSettings.setWarnAfterKcalPerDay(n);
+            }}
+            style={{
+              ...sharedStyles.textInput,
+              backgroundColor: sharedColors.gray[2],
+              borderColor: sharedColors.gray[3],
+            }}
+            placeholder="0"
+            keyboardType="numeric"
           />
         </View>
 
