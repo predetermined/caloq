@@ -140,6 +140,7 @@ export function HomeScreen(props: RootTabScreenProps<"Home">) {
     });
 
     resetValues();
+    setDidAlreadyConfirmWarningContinue(false);
     Keyboard.dismiss();
   }
 
