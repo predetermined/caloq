@@ -1,10 +1,18 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   StyleSheet,
   Pressable,
   Keyboard,
   ScrollView,
   View,
+  Animated,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 
@@ -90,7 +98,6 @@ export function HomeScreen(props: RootTabScreenProps<"Home">) {
     hidingNumbers,
     behavioralSettings,
   } = useContext(AppContext);
-  const navigation = useNavigation();
 
   const [addManually, setAddManually] = useState(false);
   const [grams, setGrams] = useState("");
@@ -102,6 +109,8 @@ export function HomeScreen(props: RootTabScreenProps<"Home">) {
     didAlreadyConfirmWarningContinue,
     setDidAlreadyConfirmWarningContinue,
   ] = useState(false);
+
+  const warningOpacity = useRef(new Animated.Value(1)).current;
 
   function resetValues() {
     setNutrionalValues(EMPTY_NUTRIONAL_VALUES_STRINGS);
@@ -140,7 +149,15 @@ export function HomeScreen(props: RootTabScreenProps<"Home">) {
     });
 
     resetValues();
+
     setDidAlreadyConfirmWarningContinue(false);
+    warningOpacity.setValue(0);
+    Animated.timing(warningOpacity, {
+      toValue: 1,
+      useNativeDriver: true,
+      duration: 150,
+    }).start();
+
     Keyboard.dismiss();
   }
 
@@ -161,6 +178,16 @@ export function HomeScreen(props: RootTabScreenProps<"Home">) {
     }
 
     setNutrionalValues(stringMeal);
+  }
+
+  function hideWarning() {
+    Animated.timing(warningOpacity, {
+      toValue: 0,
+      useNativeDriver: true,
+      duration: 300,
+    }).start(() => {
+      setDidAlreadyConfirmWarningContinue(true);
+    });
   }
 
   const displayNumbers = useMemo(() => {
@@ -296,7 +323,7 @@ export function HomeScreen(props: RootTabScreenProps<"Home">) {
               }}
             >
               {shouldShowWarning ? (
-                <View
+                <Animated.View
                   style={{
                     padding: 20,
                     position: "absolute",
@@ -307,7 +334,7 @@ export function HomeScreen(props: RootTabScreenProps<"Home">) {
                     backgroundColor: "white",
                     justifyContent: "center",
                     zIndex: 1,
-                    overflow: "hidden",
+                    opacity: warningOpacity,
                   }}
                 >
                   <View>
@@ -339,7 +366,7 @@ export function HomeScreen(props: RootTabScreenProps<"Home">) {
 
                     <Pressable
                       style={{ ...sharedStyles.button }}
-                      onPress={() => setDidAlreadyConfirmWarningContinue(true)}
+                      onPress={hideWarning}
                     >
                       <StyledText
                         style={{ textAlign: "center", color: "white" }}
@@ -348,7 +375,7 @@ export function HomeScreen(props: RootTabScreenProps<"Home">) {
                       </StyledText>
                     </Pressable>
                   </View>
-                </View>
+                </Animated.View>
               ) : null}
 
               {addManually ? (
