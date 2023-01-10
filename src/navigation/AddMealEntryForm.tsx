@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { Animated, Keyboard, View } from "react-native";
+import { Animated, Keyboard, Pressable, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Button } from "../components/Button";
 import { Label } from "../components/Label";
@@ -29,13 +29,8 @@ enum InputType {
   DirectValues = "direct_values",
 }
 
-interface InputTypeSelectorProps {
-  onSelect(type: InputType): void;
-}
-
 interface FinalInputFormCommonProps {
   onSubmit(meal: Meal): void;
-  onGoBack(): void;
 }
 
 function getValuesThatAreBeingAdded(
@@ -80,14 +75,19 @@ function NumberPreview({
   );
 }
 
-function InputTypeSelector(props: InputTypeSelectorProps) {
+function InputTypeSelector(props: {
+  onSelect(type: InputType): void;
+  onClose(): void;
+}) {
   return (
     <BlurView
-      intensity={30}
+      intensity={50}
       tint="light"
-      style={tw`pt-6 rounded-t-xl bg-white pb-24 absolute bottom-0 left-0 right-0 flex-row justify-center`}
+      style={tw`h-full rounded-t-xl bg-white pb-24 absolute inset-0 flex-row justify-center items-end`}
     >
-      <View style={tw`flex w-4/6 shadow-lg pb-2`}>
+      <Pressable onPress={props.onClose} style={tw`absolute inset-0`} />
+
+      <View style={tw`flex w-4/6 shadow-lg pb-2 z-10`}>
         <Button
           style={tw`rounded-b-0 flex-row items-center justify-start bg-gray-800`}
           onPress={() => props.onSelect(InputType.Weight)}
@@ -434,17 +434,11 @@ export function AddMealEntryForm(props: { isOpen: boolean; onClose(): void }) {
       hasBackground={!!inputType}
     >
       {inputType === InputType.DirectValues ? (
-        <FinalDirectValuesInputForm
-          onGoBack={() => setInputType(null)}
-          onSubmit={add}
-        />
+        <FinalDirectValuesInputForm onSubmit={add} />
       ) : inputType === InputType.Weight ? (
-        <FinalWeightInputForm
-          onGoBack={() => setInputType(null)}
-          onSubmit={add}
-        />
+        <FinalWeightInputForm onSubmit={add} />
       ) : (
-        <InputTypeSelector onSelect={setInputType} />
+        <InputTypeSelector onClose={props.onClose} onSelect={setInputType} />
       )}
     </Wrapper>
   );
