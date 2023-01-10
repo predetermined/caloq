@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { BlurView } from "expo-blur";
 import {
   PropsWithChildren,
   useContext,
@@ -81,46 +82,39 @@ function NumberPreview({
 
 function InputTypeSelector(props: InputTypeSelectorProps) {
   return (
-    <View style={tw`h-full justify-center`}>
-      <View style={tw`flex`}>
+    <BlurView
+      intensity={30}
+      tint="light"
+      style={tw`pt-6 rounded-t-xl bg-white pb-24 absolute bottom-0 left-0 right-0 flex-row justify-center`}
+    >
+      <View style={tw`flex w-4/6 shadow-lg pb-2`}>
         <Button
-          style={tw`w-full h-32 flex items-center justify-center bg-gray-300`}
+          style={tw`rounded-b-0 flex-row items-center justify-start bg-gray-800`}
           onPress={() => props.onSelect(InputType.Weight)}
         >
-          <View style={tw`items-center`}>
-            <Ionicons size={32} color={tw.color("black")} name="cafe" />
-            <StyledText size="lg" style={tw`mt-1 ml-3 text-black`}>
-              By weight
-            </StyledText>
-          </View>
+          <Ionicons size={20} color="white" name="cafe" />
+          <StyledText style={tw`ml-3 text-white`}>By weight</StyledText>
         </Button>
 
+        <View style={tw`flex-row justify-center bg-gray-800`}>
+          <View style={tw`h-0 border-b-2 border-gray-700 w-1/3`} />
+        </View>
+
         <Button
-          style={tw`mt-4 w-full h-32 items-center justify-center bg-gray-200`}
+          style={tw`rounded-t-0 flex-row items-center justify-start bg-gray-800`}
           onPress={() => props.onSelect(InputType.DirectValues)}
         >
-          <View style={tw`items-center`}>
-            <Ionicons size={32} color={tw.color("black")} name="options" />
-            <StyledText size="lg" style={tw`mt-1 ml-3 text-black`}>
-              By direct values
-            </StyledText>
-          </View>
+          <Ionicons size={20} color="white" name="options" />
+          <StyledText style={tw`ml-3 text-white`}>By direct values</StyledText>
         </Button>
       </View>
-    </View>
+    </BlurView>
   );
 }
 
-function FinalInputFormButtons(props: { onGoBack(): void; onSubmit(): void }) {
+function FinalInputFormButtons(props: { onSubmit(): void }) {
   return (
     <View style={tw`flex-row mt-4`}>
-      <Button
-        style={tw`bg-gray-400 w-1/5 mr-2`}
-        onPress={() => props.onGoBack()}
-      >
-        <StyledText style={tw`text-black text-center`}>Back</StyledText>
-      </Button>
-
       <Button
         style={tw`bg-gray-800 flex-1 ml-2`}
         onPress={() => props.onSubmit()}
@@ -166,7 +160,6 @@ function FinalDirectValuesInputForm(props: FinalInputFormCommonProps) {
       <NumberPreview values={valuesThatAreBeingAdded} />
 
       <FinalInputFormButtons
-        onGoBack={props.onGoBack}
         onSubmit={() => props.onSubmit(valuesThatAreBeingAdded)}
       />
     </View>
@@ -314,7 +307,6 @@ function FinalWeightInputForm(props: FinalInputFormCommonProps) {
       <NumberPreview values={valuesThatAreBeingAdded} />
 
       <FinalInputFormButtons
-        onGoBack={props.onGoBack}
         onSubmit={() => props.onSubmit(valuesThatAreBeingAdded)}
       />
     </View>
@@ -326,6 +318,7 @@ function Wrapper(
     isOpen: boolean;
     onClose(): void;
     reset(): void;
+    hasBackground?: boolean;
   }>
 ) {
   const { isKeyboardOpen } = useKeyboard();
@@ -341,7 +334,7 @@ function Wrapper(
       Animated.timing(containerOpacityRef, {
         toValue: 1,
         useNativeDriver: true,
-        duration: 200,
+        duration: 175,
       }).start();
       return;
     }
@@ -367,13 +360,15 @@ function Wrapper(
   return (
     <Animated.View
       style={[
-        tw`absolute inset-0 bg-white z-60 px-4 justify-between ${
+        tw`absolute ${
+          props.hasBackground ? "bg-white" : ""
+        } inset-0 z-60 px-4 justify-between ${
           isContainerOpen ? "flex" : "hidden"
         }`,
         { opacity: containerOpacityRef },
       ]}
     >
-      <View>{props.children}</View>
+      {props.children}
 
       {/* Top close button */}
       <Animated.View
@@ -398,7 +393,7 @@ function Wrapper(
         } absolute bottom-0 left-0 right-0 flex-row justify-center pb-6`}
       >
         <Button
-          style={tw`justify-center items-center rounded-full bg-gray-800 shadow h-16 w-16`}
+          style={tw`justify-center items-center rounded-full bg-gray-800 shadow h-16 w-16 mb-1`}
           onPress={props.onClose}
         >
           <Ionicons size={20} name="close" color="white" />
@@ -417,6 +412,8 @@ export function AddMealEntryForm(props: { isOpen: boolean; onClose(): void }) {
   }
 
   async function add(meal: Meal) {
+    Keyboard.dismiss();
+
     const date = new Date();
 
     await history.add({
@@ -424,8 +421,7 @@ export function AddMealEntryForm(props: { isOpen: boolean; onClose(): void }) {
       dateIso: date.toISOString(),
       dateReadable: date.toLocaleDateString(),
     });
-    reset();
-    Keyboard.dismiss();
+    props.onClose();
   }
 
   return (
@@ -435,6 +431,7 @@ export function AddMealEntryForm(props: { isOpen: boolean; onClose(): void }) {
       }}
       isOpen={props.isOpen}
       reset={reset}
+      hasBackground={!!inputType}
     >
       {inputType === InputType.DirectValues ? (
         <FinalDirectValuesInputForm

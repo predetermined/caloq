@@ -44,7 +44,8 @@
     "react-native-svg-charts": "^5.4.0",
     "react-native-switch-selector": "^2.2.1",
     "react-native-web": "~0.18.7",
-    "twrnc": "^3.5.0"
+    "twrnc": "^3.5.0",
+    "expo-blur": "~11.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
