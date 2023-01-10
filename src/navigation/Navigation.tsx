@@ -1,36 +1,25 @@
-/**
- * If you are not familiar with React Navigation, refer to the "Fundamentals" guide:
- * https://reactnavigation.org/docs/getting-started
- *
- */
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
-  NavigationContainer,
-  DefaultTheme,
   DarkTheme,
-  useNavigation,
+  DefaultTheme,
+  NavigationContainer,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
-import {
-  ColorSchemeName,
-  Keyboard,
-  Pressable,
-  StatusBar,
-  View,
-} from "react-native";
-import { StyledText } from "../components/StyledText";
+import { ColorSchemeName, StatusBar, View } from "react-native";
 
-import { screenBackgroundColor, sharedColors } from "../constants/layout";
-import { MealsScreen } from "../screens/MealsScreen";
-import ModalScreen from "../screens/ModalScreen";
-import NotFoundScreen from "../screens/NotFoundScreen";
-import { RootStackParamList, RootTabParamList } from "../types";
-import LinkingConfiguration from "./LinkingConfiguration";
-import { HomeScreen } from "../screens/HomeScreen";
-import { HistoryScreen } from "../screens/HistoryScreen";
-import { SettingsScreen } from "../screens/SettingsScreen";
 import { Ionicons } from "@expo/vector-icons";
+import { Button } from "../components/Button";
+import { useKeyboard } from "../hooks/useKeyboard";
+import { tw } from "../lib/tw";
+import { HistoryScreen } from "../screens/HistoryScreen";
+import { HomeScreen } from "../screens/HomeScreen";
+import { MealsScreen } from "../screens/MealsScreen";
+import { NotFoundScreen } from "../screens/NotFoundScreen";
+import { SettingsScreen } from "../screens/SettingsScreen";
+import { RootStackParamList, RootTabParamList } from "../types";
+import { AddMealEntryForm } from "./AddMealEntryForm";
+import LinkingConfiguration from "./LinkingConfiguration";
 
 export function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -43,10 +32,6 @@ export function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   );
 }
 
-/**
- * A root stack navigator is often used for displaying modals on top of all other content.
- * https://reactnavigation.org/docs/modal
- */
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
@@ -54,36 +39,9 @@ function RootNavigator() {
     <>
       <Stack.Navigator
         screenOptions={{
-          headerShown: true,
+          headerShown: false,
           headerShadowVisible: false,
           headerLargeTitleShadowVisible: false,
-          headerTransparent: true,
-          headerTitle: () => {
-            const navigation = useNavigation();
-
-            return (
-              <View
-                style={{
-                  marginLeft: "100%",
-                  marginTop: -10,
-                }}
-              >
-                <Pressable
-                  style={{
-                    padding: 10,
-                    zIndex: 100,
-                    marginLeft: -60,
-                  }}
-                  // @ts-ignore
-                  onPress={() => navigation.navigate("Settings")}
-                >
-                  <StyledText>
-                    <Ionicons size={20} name="settings" />
-                  </StyledText>
-                </Pressable>
-              </View>
-            );
-          },
         }}
       >
         <Stack.Screen name="Root" component={BottomTabNavigator} />
@@ -92,9 +50,6 @@ function RootNavigator() {
           component={NotFoundScreen}
           options={{ title: "Oops!" }}
         />
-        <Stack.Group screenOptions={{ presentation: "modal" }}>
-          <Stack.Screen name="Modal" component={ModalScreen} />
-        </Stack.Group>
       </Stack.Navigator>
     </>
   );
@@ -103,17 +58,8 @@ function RootNavigator() {
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
-  const [isKeyboardOpen, setIsKeyboardOpen] = React.useState(false);
-
-  React.useEffect(() => {
-    Keyboard.addListener("keyboardDidShow", () => setIsKeyboardOpen(true));
-    Keyboard.addListener("keyboardDidHide", () => setIsKeyboardOpen(false));
-
-    return () => {
-      Keyboard.removeAllListeners("keyboardDidShow");
-      Keyboard.removeAllListeners("keyboardDidHide");
-    };
-  }, []);
+  const [isAddEntryFormOpen, setIsEntryFormOpen] = React.useState(false);
+  const { isKeyboardOpen } = useKeyboard();
 
   return (
     <BottomTab.Navigator
@@ -121,124 +67,112 @@ function BottomTabNavigator() {
       screenOptions={{ headerShown: false, tabBarHideOnKeyboard: true }}
       tabBar={({ navigation, state }) => {
         const activeRouteName = state.routes[state.index].name;
+        const isRouteWithHangingWrapper = ["Meals", "History"].includes(
+          activeRouteName
+        );
+        const iconColor = tw.color("white");
 
         return (
           <>
+            <AddMealEntryForm
+              isOpen={isAddEntryFormOpen}
+              onClose={() => setIsEntryFormOpen(false)}
+            />
+
             <StatusBar
-              barStyle={"dark-content"}
+              barStyle="dark-content"
               backgroundColor={
-                activeRouteName === "Meals" || activeRouteName === "History"
-                  ? "white"
-                  : screenBackgroundColor
+                isRouteWithHangingWrapper && !isAddEntryFormOpen
+                  ? tw.color("gray-100")
+                  : "white"
               }
             />
+
             <View
-              style={{
-                padding: 25,
-                backgroundColor: "transparent",
-                position: "absolute",
-                bottom: 0,
-                display: isKeyboardOpen ? "none" : "flex",
-              }}
+              style={tw`pb-4 px-8 absolute bottom-0 z-50 ${
+                isKeyboardOpen ? "hidden" : "flex"
+              }`}
             >
               <View
-                style={{
-                  shadowColor: "rgba(0, 0, 0, 0.7)",
-                  shadowOpacity: 1,
-                  shadowOffset: {
-                    height: 10,
-                    width: 10,
-                  },
-                  elevation: 7,
-                  backgroundColor: "black",
-                  borderRadius: 10,
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
+                style={tw`shadow-xl bg-gray-900 rounded-lg flex-row items-center justify-center relative`}
               >
-                <View
-                  style={{
-                    width: "33.33%",
-                    overflow: "hidden",
-                    borderRadius: 10,
-                  }}
-                >
-                  <Pressable
-                    onPress={() => navigation.navigate("Meals")}
-                    android_ripple={{
-                      color: sharedColors.gray[7],
-                      foreground: true,
-                    }}
-                  >
-                    <StyledText
-                      style={{
-                        color: "white",
-                        padding: 15,
-                        textAlign: "center",
-                      }}
-                    >
-                      Meals
-                    </StyledText>
-                  </Pressable>
-                </View>
-
-                <View
-                  style={{
-                    width: "30%",
-                    overflow: "hidden",
-                    borderRadius: 5,
-                    marginTop: -8,
-                    marginBottom: 8,
-                  }}
-                >
-                  <Pressable
+                <View style={tw`w-1/5 rounded-lg items-center overflow-hidden`}>
+                  <Button
+                    style={tw`bg-gray-900 w-full items-center`}
                     onPress={() => navigation.navigate("Home")}
-                    android_ripple={{
-                      color: sharedColors.gray[6],
-                      foreground: true,
-                    }}
                   >
-                    <StyledText
-                      style={{
-                        color: "white",
-                        padding: 10,
-                        textAlign: "center",
-                        backgroundColor: sharedColors.gray[9],
-                        borderRadius: 5,
-                        elevation: 10,
-                      }}
-                    >
-                      New{"\n"}entry
-                    </StyledText>
-                  </Pressable>
+                    <Ionicons
+                      size={20}
+                      color={iconColor}
+                      name={
+                        activeRouteName === "Home" ? "home" : "home-outline"
+                      }
+                    />
+                  </Button>
                 </View>
 
-                <View
-                  style={{
-                    width: "33.33%",
-                    overflow: "hidden",
-                    borderRadius: 10,
-                  }}
-                >
-                  <Pressable
-                    onPress={() => navigation.navigate("History")}
-                    android_ripple={{
-                      color: sharedColors.gray[7],
-                      foreground: true,
-                    }}
+                <View style={tw`w-1/5 rounded-lg items-center overflow-hidden`}>
+                  <Button
+                    style={tw`bg-gray-900 w-full items-center`}
+                    onPress={() => navigation.navigate("Meals")}
                   >
-                    <StyledText
-                      style={{
-                        color: "white",
-                        padding: 15,
-                        textAlign: "center",
-                      }}
+                    <Ionicons
+                      size={20}
+                      color={iconColor}
+                      name={
+                        activeRouteName === "Meals"
+                          ? "restaurant"
+                          : "restaurant-outline"
+                      }
+                    />
+                  </Button>
+                </View>
+
+                <View style={tw`w-1/5 flex-row justify-center -mt-8`}>
+                  <View
+                    style={tw`w-16 h-16 rounded-full shadow overflow-hidden`}
+                  >
+                    <Button
+                      style={tw`h-full w-full justify-center items-center`}
+                      onPress={() => setIsEntryFormOpen((v) => !v)}
                     >
-                      History
-                    </StyledText>
-                  </Pressable>
+                      <Ionicons color="white" size={28} name="add" />
+                    </Button>
+                  </View>
+                </View>
+
+                <View style={tw`w-1/5 rounded-lg items-center overflow-hidden`}>
+                  <Button
+                    style={tw`bg-gray-900 w-full items-center`}
+                    onPress={() => navigation.navigate("History")}
+                  >
+                    <Ionicons
+                      size={20}
+                      color={iconColor}
+                      name={
+                        activeRouteName === "History"
+                          ? "stats-chart"
+                          : "stats-chart-outline"
+                      }
+                    />
+                  </Button>
+                </View>
+
+                <View style={tw`w-1/5 rounded-lg items-center overflow-hidden`}>
+                  <Button
+                    style={tw`bg-gray-900 w-full items-center`}
+                    onPress={() => navigation.navigate("Settings")}
+                  >
+                    <Ionicons
+                      size={20}
+                      color={iconColor}
+                      name={
+                        activeRouteName === "Settings"
+                          ? "settings"
+                          : "settings-outline"
+                      }
+                    />
+                  </Button>
                 </View>
               </View>
             </View>

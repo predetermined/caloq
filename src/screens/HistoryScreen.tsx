@@ -1,21 +1,16 @@
+import { curveNatural } from "d3-shape";
 import { useContext, useMemo, useRef, useState } from "react";
 import { Dimensions, ScrollView, View } from "react-native";
-import { entryTopMargin } from "../components/Entry";
+import { Grid, LineChart, XAxis, YAxis } from "react-native-svg-charts";
+import { HangingWrapper } from "../components/HangingWrapper";
 import { HistoryEntry } from "../components/HistoryEntry";
 import { StyledText } from "../components/StyledText";
-import {
-  endPadding,
-  sharedColors,
-  sharedStyles,
-  defaultBorderRadius,
-  defaultBorderColor,
-  firstElementTopMargin,
-  defaultFontFamily,
-} from "../constants/layout";
+import { DEFAULT_FONT_FAMILY } from "../constants/layout";
 import { AppContext } from "../contexts/appContext";
-import { OPTIONS } from "../hooks/useNutrionalValuePreferences";
+import { NUTRIONAL_METRICS } from "../hooks/useNutrionalValuePreferences";
 import { calculateSum } from "../lib/calculateSum";
-import { LineChart, Grid, YAxis, XAxis } from "react-native-svg-charts";
+import { DAY, getCurrentDateWithOffset, getDateAtHour0 } from "../lib/date";
+import { tw } from "../lib/tw";
 
 export function HistoryScreen() {
   const { history, nutrionalValuePreferences, hidingNumbers } =
@@ -33,6 +28,10 @@ export function HistoryScreen() {
       return groups;
     }, {} as Record<string, typeof history["entries"]>);
   }, [history.entries]);
+
+  const last30Days = history.getAggregatedDataForPeriod(
+    getDateAtHour0(getCurrentDateWithOffset(-DAY * 30))
+  );
 
   const chartData = useMemo(() => {
     const entries = Object.entries(historyGroupedByDate).slice(0, 30);
@@ -54,9 +53,7 @@ export function HistoryScreen() {
       <ScrollView
         showsVerticalScrollIndicator={false}
         overScrollMode="never"
-        style={{
-          ...sharedStyles.screenView,
-        }}
+        style={tw`bg-white`}
         onLayout={(e) => {
           const favorableOffset = 100;
 
@@ -96,81 +93,21 @@ export function HistoryScreen() {
           setAmountOfLoadedDays(amountOfLoadedDays + 3);
         }}
       >
-        <View
-          style={{
-            backgroundColor: "white",
-            borderRadius: defaultBorderRadius,
-            elevation: 16,
-            shadowColor: "rgba(0, 0, 0, 0.3)",
-            marginBottom: 20,
-            overflow: "hidden",
-            paddingTop: firstElementTopMargin,
-            borderBottomRightRadius: 20,
-            borderBottomLeftRadius: 20,
-          }}
-        >
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "center",
-              padding: 20,
-            }}
-          >
-            <View
-              style={{
-                width: "50%",
-                borderRadius: defaultBorderRadius,
-                marginRight: 5,
-              }}
-            >
+        <HangingWrapper>
+          <View style={tw`items-center`}>
+            <View>
               <StyledText
-                style={{
-                  fontSize: 11,
-                  textAlign: "center",
-                  marginBottom: 5,
-                  fontFamily: "Azeret-Mono-Italic",
-                  color: sharedColors.gray[6],
-                }}
+                size="sm"
+                style={[
+                  tw`text-center mb-1 text-gray-600`,
+                  { fontFamily: "Azeret-Mono-Italic" },
+                ]}
               >
                 Last 30 days avg.
               </StyledText>
-              <StyledText
-                style={{
-                  textAlign: "center",
-                  fontSize: 18,
-                }}
-              >
-                {Math.round(history.comparisonPeriods.last30Days.avg.kcal)} kcal
-              </StyledText>
-            </View>
-
-            <View
-              style={{
-                width: "50%",
-                borderColor: defaultBorderColor,
-                borderRadius: defaultBorderRadius,
-                marginLeft: 5,
-              }}
-            >
-              <StyledText
-                style={{
-                  fontSize: 11,
-                  textAlign: "center",
-                  marginBottom: 5,
-                  fontFamily: "Azeret-Mono-Italic",
-                  color: sharedColors.gray[6],
-                }}
-              >
-                Last 7 days avg.
-              </StyledText>
-              <StyledText
-                style={{
-                  textAlign: "center",
-                  fontSize: 18,
-                }}
-              >
-                {Math.round(history.comparisonPeriods.last7Days.avg.kcal)} kcal
+              <StyledText style={tw`text-center`} size="lg">
+                {hidingNumbers.isHiding ? "X" : Math.round(last30Days.avg.kcal)}{" "}
+                kcal
               </StyledText>
             </View>
           </View>
@@ -192,28 +129,24 @@ export function HistoryScreen() {
                 <YAxis
                   data={chartData.sums}
                   svg={{
-                    fill: sharedColors.gray[5],
+                    fill: tw.color("gray-600"),
                     fontSize: 11,
-                    fontFamily: defaultFontFamily,
+                    fontFamily: DEFAULT_FONT_FAMILY,
                   }}
                   contentInset={{ top: 5, bottom: 5 }}
                   numberOfTicks={4}
                 />
 
                 <LineChart
-                  style={{
-                    height: "100%",
-                    width: "100%",
-                    paddingRight: 20,
-                    paddingLeft: 5,
-                  }}
+                  style={tw`w-full h-full pr-4 pl-2`}
                   contentInset={{ top: 5, left: 10, bottom: 5 }}
                   data={chartData.sums}
-                  svg={{ stroke: sharedColors.gray[6] }}
+                  svg={{ stroke: tw.color("gray-800"), strokeWidth: 1 }}
+                  curve={curveNatural}
                 >
                   <Grid
                     svg={{
-                      stroke: sharedColors.gray[3],
+                      stroke: tw.color("gray-300"),
                     }}
                   />
                 </LineChart>
@@ -233,23 +166,23 @@ export function HistoryScreen() {
                 contentInset={{ left: 45, right: 15 }}
                 svg={{
                   fontSize: 11,
-                  fill: sharedColors.gray[5],
-                  fontFamily: defaultFontFamily,
+                  fill: tw.color("gray-600"),
+                  fontFamily: DEFAULT_FONT_FAMILY,
                 }}
-                style={{
-                  paddingTop: 10,
-                }}
+                style={tw`pt-2`}
               />
             </View>
           ) : null}
-        </View>
+        </HangingWrapper>
 
-        <View style={sharedStyles.section}>
+        <View style={tw`mt-4 p-4 pt-0 mb-20`}>
           {history.entries.length === 0 ? (
-            <StyledText>Nothing here yet. Keep going!</StyledText>
+            <StyledText style={tw`text-center`}>
+              Nothing here yet. Start counting! :)
+            </StyledText>
           ) : null}
 
-          <View style={{ paddingBottom: endPadding }}>
+          <View>
             {Object.keys(historyGroupedByDate)
               .slice(0, amountOfLoadedDays)
               .map((date, i) => {
@@ -259,34 +192,28 @@ export function HistoryScreen() {
                 return (
                   <View key={date}>
                     <StyledText
-                      style={{
-                        fontSize: 20,
-                        marginBottom: 5,
-                        marginTop: i === 0 ? 0 : 20,
-                      }}
+                      size="lg"
+                      style={tw`mb-1 ${i !== 0 ? "mt-4" : ""}`}
                     >
                       {date}
                     </StyledText>
 
-                    <StyledText
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        fontSize: 11,
-                        marginBottom: 15,
-                        color: sharedColors.gray[5],
-                        lineHeight: 13,
-                      }}
-                    >
+                    <StyledText size="xs" style={tw`flex-row mb-1`}>
                       {nutrionalValuePreferences.enabledValues.map((key, i) => {
                         return (
                           <StyledText key={key}>
                             {i === 0 ? null : " • "}
-                            <StyledText style={{ color: "black" }}>
+                            <StyledText>
                               {hidingNumbers.isHiding ? "X" : sum[key]}
-                              {OPTIONS[key].representation.valueRelated.unit}
+                              {
+                                NUTRIONAL_METRICS[key].representation
+                                  .valueRelated.unit
+                              }
                             </StyledText>{" "}
-                            {OPTIONS[key].representation.valueRelated.suffix}
+                            {
+                              NUTRIONAL_METRICS[key].representation.valueRelated
+                                .suffix
+                            }
                           </StyledText>
                         );
                       })}
@@ -297,7 +224,7 @@ export function HistoryScreen() {
                         <HistoryEntry
                           key={entry.dateIso}
                           entry={entry}
-                          style={{ marginTop: i === 0 ? 0 : entryTopMargin }}
+                          style={tw`${i !== 0 ? "mt-4" : ""}`}
                         />
                       );
                     })}

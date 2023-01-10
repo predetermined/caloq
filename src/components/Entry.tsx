@@ -1,28 +1,14 @@
 import { PropsWithChildren, ReactNode } from "react";
-import { View, ViewStyle } from "react-native";
-import { defaultBorderRadius, sharedColors } from "../constants/layout";
+import { StyleProp, View, ViewStyle } from "react-native";
+import { tw } from "../lib/tw";
 import { StyledText } from "./StyledText";
-
-export const entryTopMargin = 10;
 
 export function Entry({
   children,
   style,
-}: PropsWithChildren<{ style?: ViewStyle }>) {
+}: PropsWithChildren<{ style?: StyleProp<ViewStyle> }>) {
   return (
-    <View
-      style={{
-        borderRadius: defaultBorderRadius,
-        padding: 20,
-        marginTop: entryTopMargin,
-        backgroundColor: "white",
-        elevation: 4,
-        shadowColor: "rgba(0, 0, 0, 0.1)",
-        ...style,
-      }}
-    >
-      {children}
-    </View>
+    <View style={[tw`rounded p-4 mt-4 bg-gray-200`, style]}>{children}</View>
   );
 }
 
@@ -40,21 +26,11 @@ export function DefaultEntry({
   style?: ViewStyle;
 }) {
   return (
-    <Entry
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "flex-end",
-        ...style,
-      }}
-    >
-      <View style={{ display: "flex", flexDirection: "row" }}>
-        {prefix ? <View style={{ marginRight: 15 }}>{prefix}</View> : null}
+    <Entry style={[tw`flex-row items-end`, style]}>
+      <View style={tw`flex-row flex-1`}>
+        {prefix ? <View>{prefix}</View> : null}
         <View>
-          <StyledText style={{ color: sharedColors.gray[6] }}>
-            {title}
-          </StyledText>
+          <StyledText style={tw`text-gray-600`}>{title}</StyledText>
 
           <View>
             <StyledText>{content}</StyledText>

@@ -3,8 +3,8 @@ import { AsyncStorage } from "react-native";
 import { Meal } from "./useMeals";
 import {
   EMPTY_NUTRIONAL_VALUES_NUMBERS,
+  NUTRIONAL_METRICS,
   OptionKey,
-  OPTIONS,
 } from "./useNutrionalValuePreferences";
 
 export interface HistoryEntry extends Meal {
@@ -14,28 +14,6 @@ export interface HistoryEntry extends Meal {
 
 export function uniqifyEntry(entry: HistoryEntry) {
   return JSON.stringify(entry);
-}
-
-export function getLastSundayDate(from = new Date()) {
-  const lastSunday = new Date(
-    from.getTime() - from.getDay() * 1000 * 60 * 60 * 24
-  );
-  lastSunday.setHours(0);
-  lastSunday.setMinutes(0);
-  lastSunday.setSeconds(0);
-  lastSunday.setMilliseconds(0);
-  return lastSunday;
-}
-
-export function getNextSundayDate(from = new Date()) {
-  const nextSunday = new Date(
-    from.getTime() + (6 - from.getDay()) * 1000 * 60 * 60 * 24
-  );
-  nextSunday.setHours(0);
-  nextSunday.setMinutes(0);
-  nextSunday.setSeconds(0);
-  nextSunday.setMilliseconds(0);
-  return nextSunday;
 }
 
 export function useHistory() {
@@ -75,7 +53,7 @@ export function useHistory() {
       (sum, entry) => {
         const updatedSum = sum;
 
-        for (const _key in OPTIONS) {
+        for (const _key in NUTRIONAL_METRICS) {
           const key = _key as OptionKey;
           updatedSum[key] += entry[key] || 0;
         }
@@ -88,56 +66,6 @@ export function useHistory() {
     return {
       entries: historyToday,
       sum,
-    };
-  }, [entries.length]);
-
-  const comparisonPeriods = useMemo(() => {
-    const [last30Days, last7Days] = [30, 7].map((lastDaysToInclude) => {
-      const minDate = new Date(
-        new Date().getTime() - 1000 * 60 * 60 * 24 * lastDaysToInclude
-      );
-
-      const entriesWithinTimeFrame = entries.filter((entry) => {
-        return new Date(entry.dateIso) >= minDate;
-      });
-
-      const sum = entriesWithinTimeFrame.reduce(
-        (sum, entry) => {
-          const updatedSum = sum;
-
-          for (const _key in OPTIONS) {
-            const key = _key as OptionKey;
-            updatedSum[key] += entry[key] || 0;
-          }
-
-          return updatedSum;
-        },
-        { ...EMPTY_NUTRIONAL_VALUES_NUMBERS }
-      );
-
-      const uniqueDaysCount = [
-        ...new Set(entriesWithinTimeFrame.map((entry) => entry.dateReadable)),
-      ].length;
-
-      const avg = Object.entries(sum).reduce(
-        (avg, [key, value]) => {
-          return {
-            ...avg,
-            [key]: value / Math.max(uniqueDaysCount, 1),
-          };
-        },
-        { ...EMPTY_NUTRIONAL_VALUES_NUMBERS }
-      );
-
-      return {
-        sum,
-        avg,
-      };
-    });
-
-    return {
-      last30Days,
-      last7Days,
     };
   }, [entries.length]);
 
@@ -173,12 +101,76 @@ export function useHistory() {
     await loadEntries();
   }
 
+  function getAggregatedDataForPeriod(from: Date, until = new Date()) {
+    const entriesWithinTimeFrame = entries.filter((entry) => {
+      return new Date(entry.dateIso) >= from && new Date(entry.dateIso) < until;
+    });
+
+    const sum = entriesWithinTimeFrame.reduce(
+      (sum, entry) => {
+        const updatedSum = sum;
+
+        for (const _key in NUTRIONAL_METRICS) {
+          const key = _key as OptionKey;
+          updatedSum[key] += entry[key] || 0;
+        }
+
+        return updatedSum;
+      },
+      { ...EMPTY_NUTRIONAL_VALUES_NUMBERS }
+    );
+
+    const uniqueDates = [
+      ...new Set(entriesWithinTimeFrame.map((entry) => entry.dateReadable)),
+    ];
+
+    const avg = Object.entries(sum).reduce(
+      (avg, [key, value]) => {
+        return {
+          ...avg,
+          [key]: value / Math.max(uniqueDates.length, 1),
+        };
+      },
+      { ...EMPTY_NUTRIONAL_VALUES_NUMBERS }
+    );
+
+    return {
+      sum,
+      avg,
+      uniqueDates,
+      entries: entriesWithinTimeFrame,
+      dateGroups: uniqueDates.map((dateReadable) => {
+        const matchingEntries = entriesWithinTimeFrame.filter(
+          (entry) => entry.dateReadable === dateReadable
+        );
+
+        const sum = matchingEntries.reduce(
+          (sum, entry) => {
+            const updatedSum = sum;
+
+            for (const _key in NUTRIONAL_METRICS) {
+              const key = _key as OptionKey;
+              updatedSum[key] += entry[key] || 0;
+            }
+
+            return updatedSum;
+          },
+          { ...EMPTY_NUTRIONAL_VALUES_NUMBERS }
+        );
+
+        return {
+          sum,
+        };
+      }),
+    };
+  }
+
   return {
     entries,
     today,
-    comparisonPeriods,
     add,
     addMany,
     remove,
+    getAggregatedDataForPeriod,
   };
 }

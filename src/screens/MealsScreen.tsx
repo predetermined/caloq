@@ -1,24 +1,20 @@
+import { Ionicons } from "@expo/vector-icons";
 import { useContext, useState } from "react";
 import { Keyboard, Pressable, ScrollView, View } from "react-native";
+import { Button } from "../components/Button";
 import { DefaultEntry } from "../components/Entry";
+import { HangingWrapper } from "../components/HangingWrapper";
+import { Label } from "../components/Label";
 import { StyledText } from "../components/StyledText";
 import { StyledTextInput } from "../components/StyledTextInput";
-import {
-  defaultBorderRadius,
-  defaultFontSize,
-  endPadding,
-  firstElementTopMargin,
-  sharedColors,
-  sharedStyles,
-} from "../constants/layout";
 import { AppContext } from "../contexts/appContext";
 import {
   EMPTY_NUTRIONAL_VALUES_STRINGS,
+  NUTRIONAL_METRICS,
   OptionKey,
-  OPTIONS,
 } from "../hooks/useNutrionalValuePreferences";
 import { parseValuesToNumbers } from "../lib/parseValuesToNumbers";
-import { Ionicons } from "@expo/vector-icons";
+import { tw } from "../lib/tw";
 
 export function MealsScreen() {
   const { meals, nutrionalValuePreferences } = useContext(AppContext);
@@ -54,42 +50,22 @@ export function MealsScreen() {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
         overScrollMode="never"
-        style={{ ...sharedStyles.screenView }}
+        style={tw`bg-white`}
       >
-        <View
-          style={{
-            borderBottomRightRadius: 20,
-            borderBottomLeftRadius: 20,
-            padding: 15 + 20,
-            paddingTop: firstElementTopMargin,
-            backgroundColor: "white",
-            elevation: 16,
-            shadowColor: "rgba(0, 0, 0, 0.3)",
-          }}
-        >
+        <HangingWrapper>
           <View>
-            <StyledText style={sharedStyles.labelText}>Name</StyledText>
+            <Label>Name</Label>
             <StyledTextInput
               value={newMealName}
               onChangeText={(value) => setNewMealName(value)}
-              style={sharedStyles.textInput}
               placeholder="Oatmeal"
             />
           </View>
 
           {nutrionalValuePreferences.enabledValues.map((key) => {
             return (
-              <View
-                key={key}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  marginTop: 15,
-                }}
-              >
-                <StyledText style={sharedStyles.labelText}>
-                  {OPTIONS[key].label} per 100g
-                </StyledText>
+              <View key={key} style={tw`mt-4`}>
+                <Label>{NUTRIONAL_METRICS[key].label} per 100g</Label>
                 <StyledTextInput
                   value={newNutrionalValues[key]}
                   onChangeText={(value) =>
@@ -98,7 +74,6 @@ export function MealsScreen() {
                       [key]: value,
                     })
                   }
-                  style={sharedStyles.textInput}
                   placeholder="0"
                   keyboardType="numeric"
                 />
@@ -106,33 +81,12 @@ export function MealsScreen() {
             );
           })}
 
-          <Pressable
-            onPress={add}
-            style={{ marginTop: 15, ...sharedStyles.button }}
-            android_ripple={{
-              color: sharedColors.gray[5],
-              foreground: true,
-            }}
-          >
-            <StyledText
-              style={{
-                color: "white",
-                fontSize: defaultFontSize,
-                textAlign: "center",
-              }}
-            >
-              Add
-            </StyledText>
-          </Pressable>
-        </View>
+          <Button onPress={add} style={tw`mt-4 bg-gray-800`}>
+            Add
+          </Button>
+        </HangingWrapper>
 
-        <View
-          style={{
-            ...sharedStyles.section,
-            paddingBottom: endPadding,
-            marginTop: 10,
-          }}
-        >
+        <View style={tw`p-4 pt-0 mb-20`}>
           {Object.keys(meals.entries).map((mealKey, i) => {
             const meal = meals.entries[mealKey];
 
@@ -142,9 +96,9 @@ export function MealsScreen() {
                   content +
                   (i === 0 ? "" : "\n") +
                   (meal[key] ?? "0") +
-                  OPTIONS[key].representation.valueRelated.unit +
+                  NUTRIONAL_METRICS[key].representation.valueRelated.unit +
                   " " +
-                  OPTIONS[key].representation.valueRelated.suffix
+                  NUTRIONAL_METRICS[key].representation.valueRelated.suffix
                 );
               },
               ""
@@ -156,45 +110,26 @@ export function MealsScreen() {
                 title={mealKey}
                 content={content}
                 prefix={
-                  <View
-                    style={{
-                      display: "flex",
-                      flex: 1,
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Pressable
+                  <View style={tw`flex-1 justify-center`}>
+                    <Button
                       disabled={i === 0}
                       onPress={() => moveUpInOrder(mealKey)}
-                      style={{
-                        opacity: i === 0 ? 0.5 : 1,
-                        padding: 5,
-                        backgroundColor: "black",
-                        borderRadius: 100,
-                      }}
-                      android_ripple={{
-                        color: "rgba(255, 255, 255, 0.75)",
-                        foreground: true,
-                      }}
+                      style={tw`${
+                        i === 0 ? "opacity-50" : ""
+                      } p-2 rounded-b-full rounded-t-full bg-gray-800 mr-4 h-14 w-14 items-center justify-center`}
                     >
-                      <StyledText>
-                        <Ionicons size={20} name="chevron-up" color="white" />
-                      </StyledText>
-                    </Pressable>
+                      <Ionicons size={20} name="chevron-up" color="white" />
+                    </Button>
                   </View>
                 }
                 actions={
                   <Pressable
-                    style={{
-                      backgroundColor: "#dc2626",
-                      padding: 7,
-                      borderRadius: defaultBorderRadius,
-                    }}
+                    style={tw`p-2 rounded bg-gray-800`}
                     onPress={async () => {
                       await meals.remove(mealKey);
                     }}
                   >
-                    <StyledText style={{ color: "white", fontSize: 12 }}>
+                    <StyledText style={tw`text-white`} size="sm">
                       Delete
                     </StyledText>
                   </Pressable>

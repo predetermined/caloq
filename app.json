@@ -4,7 +4,7 @@
     "name": "caloq",
     "owner": "l5d",
     "slug": "caloq",
-    "version": "1.6.2",
+    "version": "1.7.6",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "caloq",
@@ -12,7 +12,7 @@
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "cover",
-      "backgroundColor": "#DC2626"
+      "backgroundColor": "#ffffff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -24,11 +24,11 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon.png",
-        "backgroundColor": "#DC2626"
+        "backgroundColor": "#4ADE80"
       },
       "package": "li.l5d.caloq",
       "permissions": [],
-      "versionCode": 162
+      "versionCode": 176
     },
     "extra": {
       "eas": {

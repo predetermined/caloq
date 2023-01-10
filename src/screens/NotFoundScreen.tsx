@@ -1,19 +1,14 @@
 import { Pressable, View } from "react-native";
 import { StyledText } from "../components/StyledText";
+import { tw } from "../lib/tw";
 
 import { RootStackScreenProps } from "../types";
 
-export default function NotFoundScreen({
+export function NotFoundScreen({
   navigation,
 }: RootStackScreenProps<"NotFound">) {
   return (
-    <View
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <View style={tw`items-center justify-center`}>
       <StyledText>Not found.</StyledText>
 
       <Pressable onPress={() => navigation.navigate("Root")}>

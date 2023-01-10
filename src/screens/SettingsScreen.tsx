@@ -1,22 +1,55 @@
-import { useContext } from "react";
-import { Pressable, ScrollView, View, ToastAndroid } from "react-native";
-import BouncyCheckbox from "react-native-bouncy-checkbox";
-import { StyledText } from "../components/StyledText";
-import {
-  defaultBorderRadius,
-  defaultFontFamily,
-  defaultFontSize,
-  firstElementTopMargin,
-  sharedColors,
-  sharedStyles,
-} from "../constants/layout";
-import { AppContext } from "../contexts/appContext";
-import { OptionKey, OPTIONS } from "../hooks/useNutrionalValuePreferences";
-import * as FileSystem from "expo-file-system";
 import * as DocumentPicker from "expo-document-picker";
+import * as FileSystem from "expo-file-system";
+import { useContext } from "react";
+import {
+  ScrollView,
+  StyleProp,
+  ToastAndroid,
+  View,
+  ViewStyle,
+} from "react-native";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
+import { Button } from "../components/Button";
+import { Label } from "../components/Label";
+import { StyledText } from "../components/StyledText";
+import { StyledTextInput } from "../components/StyledTextInput";
+import { DEFAULT_FONT_FAMILY, DEFAULT_FONT_SIZE } from "../constants/layout";
+import { AppContext } from "../contexts/appContext";
 import { HistoryEntry, uniqifyEntry } from "../hooks/useHistory";
 import { Meal, MealAsObject } from "../hooks/useMeals";
-import { StyledTextInput } from "../components/StyledTextInput";
+import {
+  NUTRIONAL_METRICS,
+  OptionKey,
+} from "../hooks/useNutrionalValuePreferences";
+import { tw } from "../lib/tw";
+
+function Checkbox(props: {
+  text: string;
+  isChecked: boolean;
+  onPress(): void;
+  style?: StyleProp<ViewStyle>;
+}) {
+  return (
+    <BouncyCheckbox
+      innerIconStyle={[tw`rounded border-0`]}
+      textStyle={[
+        tw`text-black no-underline text-base`,
+        {
+          fontSize: DEFAULT_FONT_SIZE,
+          fontFamily: DEFAULT_FONT_FAMILY,
+        },
+      ]}
+      style={props.style}
+      bounceEffectIn={0.9}
+      fillColor={tw.color(`gray-800`)}
+      unfillColor={tw.color(`bg-gray-300`)}
+      iconStyle={tw`rounded`}
+      text={props.text}
+      isChecked={props.isChecked}
+      onPress={props.onPress}
+    />
+  );
+}
 
 export function SettingsScreen() {
   const {
@@ -135,43 +168,21 @@ export function SettingsScreen() {
       <ScrollView
         showsVerticalScrollIndicator={false}
         overScrollMode="never"
-        style={{ ...sharedStyles.screenView, ...sharedStyles.section }}
+        style={tw`bg-white p-4 pt-6`}
       >
-        <View style={{ marginTop: firstElementTopMargin }}>
-          <StyledText
-            style={{
-              fontSize: 20,
-              marginBottom: 15,
-            }}
-          >
+        <View>
+          <StyledText size="lg" style={tw`mb-3`}>
             Nutrional values{"\n"}to display
           </StyledText>
 
-          {Object.entries(OPTIONS).map(([_key, option], i) => {
+          {Object.entries(NUTRIONAL_METRICS).map(([_key, option], i) => {
             const key = _key as OptionKey;
 
             return (
-              <BouncyCheckbox
+              <Checkbox
                 key={key}
-                innerIconStyle={{
-                  borderRadius: defaultBorderRadius,
-                  borderColor: sharedColors.gray[3],
-                  borderWidth: 0.75,
-                }}
-                textStyle={{
-                  textDecorationLine: "none",
-                  fontSize: defaultFontSize,
-                  fontFamily: defaultFontFamily,
-                  color: "black",
-                }}
-                bounceEffectIn={0.9}
-                fillColor={sharedColors.red}
-                unfillColor={sharedColors.gray[2]}
-                iconStyle={{ borderRadius: defaultBorderRadius }}
                 text={option.label}
-                style={{
-                  marginTop: i === 0 ? 0 : 10,
-                }}
+                style={tw`${i !== 0 ? "mt-2" : ""}`}
                 isChecked={nutrionalValuePreferences.enabledValues.includes(
                   key
                 )}
@@ -187,32 +198,12 @@ export function SettingsScreen() {
           })}
         </View>
 
-        <View style={{ marginTop: 20 }}>
-          <StyledText
-            style={{
-              fontSize: 20,
-              marginBottom: 15,
-            }}
-          >
+        <View style={tw`mt-4`}>
+          <StyledText size="lg" style={tw`mb-3`}>
             Visibility
           </StyledText>
 
-          <BouncyCheckbox
-            innerIconStyle={{
-              borderRadius: defaultBorderRadius,
-              borderColor: sharedColors.gray[3],
-              borderWidth: 0.75,
-            }}
-            textStyle={{
-              textDecorationLine: "none",
-              fontSize: defaultFontSize,
-              fontFamily: defaultFontFamily,
-              color: "black",
-            }}
-            bounceEffectIn={0.9}
-            fillColor={sharedColors.red}
-            unfillColor={sharedColors.gray[2]}
-            iconStyle={{ borderRadius: defaultBorderRadius }}
+          <Checkbox
             text="Hide numbers"
             isChecked={hidingNumbers.isHiding}
             onPress={() => {
@@ -221,91 +212,41 @@ export function SettingsScreen() {
           />
         </View>
 
-        <View style={{ marginTop: 20 }}>
-          <StyledText
-            style={{
-              fontSize: 20,
-              marginBottom: 15,
-            }}
-          >
+        <View style={tw`mt-4`}>
+          <StyledText size="lg" style={tw`mb-3`}>
             Behaviour
           </StyledText>
 
-          <StyledText
-            style={{
-              fontSize: 16,
-              marginBottom: 10,
-            }}
-          >
-            Warn after kcal/day
-          </StyledText>
-
+          <Label size="md">Daily kcal goal</Label>
           <StyledTextInput
-            value={String(behavioralSettings.warnAfterKcalPerDay || "")}
+            value={String(behavioralSettings.dailyKcalGoal || "")}
             onChangeText={(value) => {
               const n = Number(value) || null;
-              behavioralSettings.setWarnAfterKcalPerDay(n);
-            }}
-            style={{
-              ...sharedStyles.textInput,
-              backgroundColor: sharedColors.gray[2],
-              borderColor: sharedColors.gray[3],
+              behavioralSettings.setDailyKcalGoal(n);
             }}
             placeholder="0"
             keyboardType="numeric"
           />
         </View>
 
-        <View style={{ marginTop: 20 }}>
-          <StyledText
-            style={{
-              fontSize: 20,
-              marginBottom: 15,
-            }}
-          >
+        <View style={tw`mt-4 mb-20`}>
+          <StyledText size="lg" style={tw`mb-3`}>
             Data
           </StyledText>
 
-          <Pressable
-            style={{
-              padding: 15,
-              backgroundColor: sharedColors.gray[8],
-              borderRadius: defaultBorderRadius,
-              marginBottom: 5,
-            }}
-            onPress={importData}
-          >
-            <StyledText style={{ color: "white" }}>Import</StyledText>
-          </Pressable>
-          <StyledText
-            style={{
-              color: sharedColors.gray[5],
-              fontSize: 11,
-              lineHeight: 13,
-            }}
-          >
+          <Button style={tw`bg-green-400 mb-1`} onPress={importData}>
+            <StyledText style={tw`text-green-900 text-center`}>
+              Import
+            </StyledText>
+          </Button>
+          <StyledText size="sm" style={tw`text-gray-600`}>
             Import your previously exported file.
           </StyledText>
 
-          <Pressable
-            style={{
-              padding: 15,
-              backgroundColor: "black",
-              borderRadius: defaultBorderRadius,
-              marginTop: 15,
-              marginBottom: 5,
-            }}
-            onPress={exportData}
-          >
-            <StyledText style={{ color: "white" }}>Export</StyledText>
-          </Pressable>
-          <StyledText
-            style={{
-              color: sharedColors.gray[5],
-              fontSize: 11,
-              lineHeight: 13,
-            }}
-          >
+          <Button style={tw`mt-4 bg-gray-800 mb-1`} onPress={exportData}>
+            Export
+          </Button>
+          <StyledText size="sm" style={tw`text-gray-600`}>
             Create a new folder to use for caloq exports. You can then sync the
             generated file across devices the way you like and restore from it
             later on.

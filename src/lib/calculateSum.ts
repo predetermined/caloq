@@ -1,8 +1,8 @@
 import { HistoryEntry } from "../hooks/useHistory";
 import {
-  OptionKey,
-  OPTIONS,
   EMPTY_NUTRIONAL_VALUES_NUMBERS,
+  NUTRIONAL_METRICS,
+  OptionKey,
 } from "../hooks/useNutrionalValuePreferences";
 
 export function calculateSum(entries: HistoryEntry[]) {
@@ -10,7 +10,7 @@ export function calculateSum(entries: HistoryEntry[]) {
     (sum, entry) => {
       const updatedSum = sum;
 
-      for (const _key in OPTIONS) {
+      for (const _key in NUTRIONAL_METRICS) {
         const key = _key as OptionKey;
         updatedSum[key] += entry[key] || 0;
       }

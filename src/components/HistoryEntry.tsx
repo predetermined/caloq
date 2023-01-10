@@ -1,9 +1,9 @@
 import { useContext } from "react";
 import { Pressable, ViewStyle } from "react-native";
-import { defaultBorderRadius } from "../constants/layout";
 import { AppContext } from "../contexts/appContext";
 import { HistoryEntry as IHistoryEntry } from "../hooks/useHistory";
-import { OPTIONS } from "../hooks/useNutrionalValuePreferences";
+import { NUTRIONAL_METRICS } from "../hooks/useNutrionalValuePreferences";
+import { tw } from "../lib/tw";
 import { DefaultEntry } from "./Entry";
 import { StyledText } from "./StyledText";
 
@@ -23,9 +23,9 @@ export function HistoryEntry({
         content +
         (i === 0 ? "" : "\n") +
         (hidingNumbers.isHiding ? "X" : entry[key] ?? "0") +
-        OPTIONS[key].representation.valueRelated.unit +
+        NUTRIONAL_METRICS[key].representation.valueRelated.unit +
         " " +
-        OPTIONS[key].representation.valueRelated.suffix
+        NUTRIONAL_METRICS[key].representation.valueRelated.suffix
       );
     },
     ""
@@ -37,11 +37,7 @@ export function HistoryEntry({
       content={content}
       actions={
         <Pressable
-          style={{
-            backgroundColor: "#dc2626",
-            padding: 7,
-            borderRadius: defaultBorderRadius,
-          }}
+          style={tw`bg-gray-800 p-2 rounded`}
           onPress={async () => {
             await history.remove(entry.dateIso);
           }}
@@ -50,7 +46,7 @@ export function HistoryEntry({
             foreground: true,
           }}
         >
-          <StyledText style={{ color: "white", fontSize: 12 }}>
+          <StyledText size="sm" style={tw`text-white`}>
             Delete
           </StyledText>
         </Pressable>

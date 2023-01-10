@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { tw } from "../lib/tw";
 
 export const EMPTY_NUTRIONAL_VALUES_STRINGS: Record<OptionKey, string> = {
   kcal: "",
@@ -18,10 +19,12 @@ export const EMPTY_NUTRIONAL_VALUES_NUMBERS: Record<OptionKey, number> = {
   carbs: 0,
 } as const;
 
-export const OPTIONS = {
+export const NUTRIONAL_METRICS = {
   kcal: {
     label: "Kcal",
     representation: {
+      color: tw.color("indigo-500"),
+      iconName: "flash",
       valueRelated: {
         unit: "",
         suffix: "kcal",
@@ -31,6 +34,8 @@ export const OPTIONS = {
   protein: {
     label: "Grams of protein",
     representation: {
+      color: tw.color("indigo-300"),
+      iconName: "barbell",
       valueRelated: {
         unit: "g",
         suffix: "protein",
@@ -40,6 +45,8 @@ export const OPTIONS = {
   sugar: {
     label: "Grams of sugar",
     representation: {
+      color: tw.color("gray-800"),
+      iconName: "barbell",
       valueRelated: {
         unit: "g",
         suffix: "sugar",
@@ -49,6 +56,8 @@ export const OPTIONS = {
   fiber: {
     label: "Grams of fiber",
     representation: {
+      color: tw.color("orange-400"),
+      iconName: "barbell",
       valueRelated: {
         unit: "g",
         suffix: "fiber",
@@ -58,6 +67,8 @@ export const OPTIONS = {
   carbs: {
     label: "Grams of carbs",
     representation: {
+      color: tw.color("orange-400"),
+      iconName: "barbell",
       valueRelated: {
         unit: "g",
         suffix: "carbs",
@@ -67,6 +78,8 @@ export const OPTIONS = {
   fat: {
     label: "Grams of fat",
     representation: {
+      color: tw.color("orange-400"),
+      iconName: "barbell",
       valueRelated: {
         unit: "g",
         suffix: "fat",
@@ -75,7 +88,7 @@ export const OPTIONS = {
   },
 } as const;
 
-export type OptionKey = keyof typeof OPTIONS;
+export type OptionKey = keyof typeof NUTRIONAL_METRICS;
 
 export function useNutrionalValuePreferences() {
   const [enabledValues, setEnabledValues] = useState<OptionKey[]>([
