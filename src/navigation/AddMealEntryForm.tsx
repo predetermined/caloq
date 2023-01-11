@@ -81,13 +81,13 @@ function InputTypeSelector(props: {
 }) {
   return (
     <BlurView
-      intensity={50}
+      intensity={60}
       tint="light"
-      style={tw`h-full rounded-t-xl bg-white pb-24 absolute inset-0 flex-row justify-center items-end`}
+      style={tw`h-full rounded-t-xl bg-white pb-20 absolute inset-0 flex-row justify-center items-end`}
     >
       <Pressable onPress={props.onClose} style={tw`absolute inset-0`} />
 
-      <View style={tw`flex w-4/6 shadow-lg pb-2 z-10`}>
+      <View style={tw`flex w-4/6 shadow-lg pb-4 mb-1 z-10`}>
         <Button
           style={tw`rounded-b-0 flex-row items-center justify-start bg-gray-800`}
           onPress={() => props.onSelect(InputType.Weight)}
@@ -393,7 +393,7 @@ function Wrapper(
         } absolute bottom-0 left-0 right-0 flex-row justify-center pb-6`}
       >
         <Button
-          style={tw`justify-center items-center rounded-full bg-gray-800 shadow h-16 w-16 mb-1`}
+          style={tw`justify-center items-center rounded-full bg-gray-800 shadow h-16 w-16 mb-2`}
           onPress={props.onClose}
         >
           <Ionicons size={20} name="close" color="white" />
