@@ -18,7 +18,7 @@ export function Button(
   return (
     <Pressable
       {...props}
-      style={[tw`bg-gray-800 py-4 px-3 rounded overflow-hidden`, props.style]}
+      style={[tw`bg-gray-800 py-5 px-4 rounded overflow-hidden`, props.style]}
       android_ripple={{
         color: tw.color("white opacity-5"),
         foreground: true,

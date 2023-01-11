@@ -8,7 +8,7 @@ export function StyledTextInput(props: TextInputProps) {
       selectionColor="black"
       placeholderTextColor={tw.color("gray-600")}
       style={[
-        tw`bg-gray-300 p-3 rounded text-black`,
+        tw`bg-gray-300 py-3 px-4 rounded text-black`,
         props.style,
         { fontFamily: "Azeret-Mono", includeFontPadding: false },
       ]}
