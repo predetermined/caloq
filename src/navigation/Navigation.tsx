@@ -129,16 +129,12 @@ function BottomTabNavigator() {
                 </View>
 
                 <View style={tw`w-1/5 flex-row justify-center -mt-8`}>
-                  <View
-                    style={tw`w-16 h-16 rounded-full shadow overflow-hidden`}
+                  <Button
+                    style={tw`h-16 w-16 p-0 rounded-full shadow justify-center items-center`}
+                    onPress={() => setIsEntryFormOpen((v) => !v)}
                   >
-                    <Button
-                      style={tw`h-full w-full justify-center items-center`}
-                      onPress={() => setIsEntryFormOpen((v) => !v)}
-                    >
-                      <Ionicons color="white" size={28} name="add" />
-                    </Button>
-                  </View>
+                    <Ionicons color="white" size={28} name="add" />
+                  </Button>
                 </View>
 
                 <View style={tw`w-1/5 rounded-lg items-center overflow-hidden`}>
