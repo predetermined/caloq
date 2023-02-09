@@ -29,6 +29,10 @@ export function HistoryScreen() {
     }, {} as Record<string, typeof history["entries"]>);
   }, [history.entries]);
 
+  const last7Days = history.getAggregatedDataForPeriod(
+    getDateAtHour0(getCurrentDateWithOffset(-DAY * 7))
+  );
+
   const last30Days = history.getAggregatedDataForPeriod(
     getDateAtHour0(getCurrentDateWithOffset(-DAY * 30))
   );
@@ -94,10 +98,26 @@ export function HistoryScreen() {
         }}
       >
         <HangingWrapper>
-          <View style={tw`items-center`}>
+          <View style={tw`flex-row justify-center  items-center`}>
+            <View style={tw`mr-4`}>
+              <StyledText
+                size="xs"
+                style={[
+                  tw`text-center mb-1 text-gray-600`,
+                  { fontFamily: "Azeret-Mono-Italic" },
+                ]}
+              >
+                Last 7 days avg.
+              </StyledText>
+              <StyledText style={tw`text-center`} size="md">
+                {hidingNumbers.isHiding ? "X" : Math.round(last7Days.avg.kcal)}{" "}
+                kcal
+              </StyledText>
+            </View>
+
             <View>
               <StyledText
-                size="sm"
+                size="xs"
                 style={[
                   tw`text-center mb-1 text-gray-600`,
                   { fontFamily: "Azeret-Mono-Italic" },
@@ -105,7 +125,7 @@ export function HistoryScreen() {
               >
                 Last 30 days avg.
               </StyledText>
-              <StyledText style={tw`text-center`} size="lg">
+              <StyledText style={tw`text-center`} size="md">
                 {hidingNumbers.isHiding ? "X" : Math.round(last30Days.avg.kcal)}{" "}
                 kcal
               </StyledText>

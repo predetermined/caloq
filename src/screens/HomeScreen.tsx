@@ -55,73 +55,52 @@ export function HomeScreen() {
         <LineChart
           style={tw`h-48 rounded`}
           svg={{
-            stroke: tw.color("gray-200"),
-            strokeWidth: 2,
+            stroke: tw.color("green-300"),
+            strokeWidth: 1.6,
           }}
           contentInset={{ top: 5, bottom: 15 }}
           data={chartData}
           curve={curveNatural}
-        >
-          <View style={tw`absolute inset-0 items-center justify-center`}>
-            <View>
-              <StyledText size="md" style={tw`max-w-[18rem] mb-1`}>
-                7-day kcal avg.
-              </StyledText>
-              <StyledText size="2xl" style={tw`text-center`}>
-                {hidingNumbers.isHiding
-                  ? "X"
-                  : Math.round(last7Days.avg.kcal) + ""}
-              </StyledText>
-            </View>
-          </View>
-        </LineChart>
+        />
       ) : null}
 
-      <View style={tw`flex-row justify-center items-end -mr-11`}>
+      <View style={tw`flex-row justify-center items-end -mr-8`}>
         <StyledText size="5xl">
           {hidingNumbers.isHiding ? "X" : history.today.sum.kcal}
         </StyledText>
-        <StyledText
-          style={[
-            { marginBottom: 13, lineHeight: 15 },
-            tw`p-1 rounded bg-green-400 text-green-900`,
-          ]}
-          size="sm"
-        >
+        <StyledText style={[{ marginBottom: 13, lineHeight: 15 }]} size="sm">
           kcal
         </StyledText>
       </View>
 
-      <View style={tw`p-4 pt-0 pb-8 mb-20`}>
-        <View
-          style={[
-            tw`mt-4 p-6 rounded flex-row justify-start flex-wrap bg-gray-100`,
-          ]}
-        >
-          {enabledValuesWithoutKcal.map((value, i) => {
-            return (
-              <View
-                key={value}
-                style={tw`w-1/${Math.min(
-                  2,
-                  enabledValuesWithoutKcal.length
-                )} flex-row ${i % 2 !== 0 ? "justify-end" : ""} ${
-                  i >= 2 ? "mt-4" : ""
-                }`}
-              >
-                <View>
-                  <StyledText style={tw`opacity-75`}>
-                    {NUTRIONAL_METRICS[value].label}
-                  </StyledText>
-                  <StyledText size="lg">
-                    {hidingNumbers.isHiding ? "X" : history.today.sum[value]}
-                  </StyledText>
-                </View>
+      <View
+        style={[tw`mt-4 p-6 shadow flex-row justify-start flex-wrap bg-black`]}
+      >
+        {enabledValuesWithoutKcal.map((value, i) => {
+          return (
+            <View
+              key={value}
+              style={tw`w-1/${Math.min(
+                2,
+                enabledValuesWithoutKcal.length
+              )} flex-row ${i % 2 !== 0 ? "justify-end" : ""} ${
+                i >= 2 ? "mt-4" : ""
+              }`}
+            >
+              <View>
+                <StyledText style={tw`opacity-75 text-white`}>
+                  {NUTRIONAL_METRICS[value].label}
+                </StyledText>
+                <StyledText style={tw`text-white`} size="lg">
+                  {hidingNumbers.isHiding ? "X" : history.today.sum[value]}
+                </StyledText>
               </View>
-            );
-          })}
-        </View>
+            </View>
+          );
+        })}
+      </View>
 
+      <View style={tw`p-4 pt-0 pb-8 mb-20`}>
         {behavioralSettings.todaysKcalGoal ? (
           <View style={tw`mt-4`}>
             <View
