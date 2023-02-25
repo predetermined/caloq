@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { AsyncStorage } from "react-native";
 import { tw } from "../lib/tw";
 
 export const EMPTY_NUTRIONAL_VALUES_STRINGS: Record<OptionKey, string> = {
@@ -97,12 +98,37 @@ export function useNutrionalValuePreferences() {
     "sugar",
   ]);
 
-  function enable(key: OptionKey) {
-    setEnabledValues([...enabledValues.filter((_key) => _key !== key), key]);
+  async function loadState() {
+    try {
+      const nutrionalValuePreferencesString = await AsyncStorage.getItem(
+        "nutrionalValuePreferences"
+      );
+      if (!nutrionalValuePreferencesString) return;
+
+      setEnabledValues(JSON.parse(nutrionalValuePreferencesString));
+    } catch {}
   }
 
-  function disable(key: OptionKey) {
-    setEnabledValues([...enabledValues].filter((_key) => _key !== key));
+  useEffect(() => {
+    loadState();
+  }, []);
+
+  async function enable(key: OptionKey) {
+    const newState = [...enabledValues.filter((_key) => _key !== key), key];
+    setEnabledValues(newState);
+    await AsyncStorage.setItem(
+      "nutrionalValuePreferences",
+      JSON.stringify(newState)
+    );
+  }
+
+  async function disable(key: OptionKey) {
+    const newState = [...enabledValues].filter((_key) => _key !== key);
+    setEnabledValues(newState);
+    await AsyncStorage.setItem(
+      "nutrionalValuePreferences",
+      JSON.stringify(newState)
+    );
   }
 
   return {
