@@ -10,9 +10,7 @@ import {
 } from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { Button } from "../components/Button";
-import { Label } from "../components/Label";
 import { StyledText } from "../components/StyledText";
-import { StyledTextInput } from "../components/StyledTextInput";
 import { DEFAULT_FONT_FAMILY, DEFAULT_FONT_SIZE } from "../constants/layout";
 import { AppContext } from "../contexts/appContext";
 import { HistoryEntry, uniqifyEntry } from "../hooks/useHistory";
@@ -52,13 +50,8 @@ function Checkbox(props: {
 }
 
 export function SettingsScreen() {
-  const {
-    history,
-    meals,
-    nutrionalValuePreferences,
-    hidingNumbers,
-    behavioralSettings,
-  } = useContext(AppContext);
+  const { history, meals, nutrionalValuePreferences, hidingNumbers } =
+    useContext(AppContext);
 
   async function exportData() {
     const status =
@@ -209,23 +202,6 @@ export function SettingsScreen() {
             onPress={() => {
               hidingNumbers.toggle();
             }}
-          />
-        </View>
-
-        <View style={tw`mt-4`}>
-          <StyledText size="lg" style={tw`mb-3`}>
-            Behaviour
-          </StyledText>
-
-          <Label size="md">Daily kcal goal</Label>
-          <StyledTextInput
-            value={String(behavioralSettings.dailyKcalGoal || "")}
-            onChangeText={(value) => {
-              const n = Number(value) || null;
-              behavioralSettings.setDailyKcalGoal(n);
-            }}
-            placeholder="0"
-            keyboardType="numeric"
           />
         </View>
 

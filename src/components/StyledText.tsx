@@ -16,6 +16,7 @@ const sizeStylings = {
   },
   lg: {
     fontSize: 18,
+    lineHeight: 26,
   },
   xl: {
     fontSize: 22,

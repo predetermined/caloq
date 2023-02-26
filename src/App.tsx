@@ -1,14 +1,13 @@
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import { registerRootComponent } from "expo";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { AppContext } from "./contexts/appContext";
 import useCachedResources from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
-import { Navigation } from "./navigation/Navigation";
-import { AppContext } from "./contexts/appContext";
+import { useHidingNumbers } from "./hooks/useHidingNumbers";
 import { useHistory } from "./hooks/useHistory";
 import { useMeals } from "./hooks/useMeals";
 import { useNutrionalValuePreferences } from "./hooks/useNutrionalValuePreferences";
-import { useHidingNumbers } from "./hooks/useHidingNumbers";
-import { useBehaviouralSettings } from "./hooks/useBehaviouralSettings";
+import { Navigation } from "./navigation/Navigation";
 
 export function App() {
   const isLoadingComplete = useCachedResources();
@@ -17,7 +16,6 @@ export function App() {
   const meals = useMeals();
   const nutrionalValuePreferences = useNutrionalValuePreferences();
   const hidingNumbers = useHidingNumbers();
-  const behavioralSettings = useBehaviouralSettings();
 
   if (!isLoadingComplete) {
     return null;
@@ -30,7 +28,6 @@ export function App() {
             meals,
             nutrionalValuePreferences,
             hidingNumbers,
-            behavioralSettings,
           }}
         >
           <Navigation colorScheme={colorScheme} />
