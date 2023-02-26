@@ -116,9 +116,9 @@ export function MealsScreen() {
                         onPress={() => moveUpInOrder(mealKey)}
                         style={tw`${
                           i === 0 ? "opacity-50" : ""
-                        } p-2 rounded-b-full rounded-t-full bg-gray-800 mr-4 h-14 w-14 items-center justify-center`}
+                        } p-2 rounded-b-full rounded-t-full bg-gray-800 mr-4 h-10 w-10 items-center justify-center`}
                       >
-                        <Ionicons size={20} name="chevron-up" color="white" />
+                        <Ionicons size={18} name="chevron-up" color="white" />
                       </Button>
                     </View>
                   }
