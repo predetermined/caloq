@@ -52,7 +52,7 @@ export function MealsScreen() {
         style={tw`bg-white`}
       >
         <View style={tw`p-4`}>
-          <View style={tw`p-4 bg-gray-200 rounded`}>
+          <View style={tw`p-4 bg-gray-100 rounded`}>
             <View>
               <Label>Name</Label>
               <StyledTextInput
