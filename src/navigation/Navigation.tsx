@@ -67,9 +67,7 @@ function BottomTabNavigator() {
       screenOptions={{ headerShown: false, tabBarHideOnKeyboard: true }}
       tabBar={({ navigation, state }) => {
         const activeRouteName = state.routes[state.index].name;
-        const isRouteWithHangingWrapper = ["Meals", "History"].includes(
-          activeRouteName
-        );
+        const isRouteWithHangingWrapper = ["History"].includes(activeRouteName);
         const iconColor = tw.color("white");
 
         return (
