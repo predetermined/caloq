@@ -161,7 +161,7 @@ export function SettingsScreen() {
       <ScrollView
         showsVerticalScrollIndicator={false}
         overScrollMode="never"
-        style={tw`bg-white p-4 pt-6`}
+        style={tw`bg-white p-4`}
       >
         <View>
           <StyledText size="lg" style={tw`mb-3`}>

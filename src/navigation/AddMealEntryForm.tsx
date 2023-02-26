@@ -137,7 +137,7 @@ function FinalDirectValuesInputForm(props: FinalInputFormCommonProps) {
   );
 
   return (
-    <View style={tw`pt-6`}>
+    <View style={tw`pt-4`}>
       {nutrionalValuePreferences.enabledValues.map((key, i) => {
         return (
           <View key={key} style={tw`${i !== 0 ? "mt-4" : ""}`}>
@@ -213,7 +213,7 @@ function FinalWeightInputForm(props: FinalInputFormCommonProps) {
   );
 
   return (
-    <View style={tw`pt-6`}>
+    <View style={tw`pt-4`}>
       <View>
         <Label>Grams</Label>
         <StyledTextInput
