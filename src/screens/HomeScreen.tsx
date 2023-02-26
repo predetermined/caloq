@@ -21,11 +21,6 @@ export function HomeScreen() {
     getDateAtHour0(getCurrentDateWithOffset(-DAY * 7))
   );
 
-  const yesterdayKcalSum = history.getAggregatedDataForPeriod(
-    getDateAtHour0(getCurrentDateWithOffset(-DAY)),
-    getDateAtHour0(new Date())
-  ).sum.kcal;
-
   const chartData = last7Days.dateGroups
     .filter((d) => d.sum.kcal > 0)
     .map((d) => {
@@ -36,17 +31,21 @@ export function HomeScreen() {
   return (
     <View style={[tw`bg-white pt-6 flex-1`]}>
       <View>
-        <LineChart
-          style={tw`h-32 rounded`}
-          svg={{
-            stroke: tw.color("green-200"),
-            strokeWidth: 1.6,
-          }}
-          contentInset={{ top: 15, bottom: 15 }}
-          data={chartData}
-          curve={curveNatural}
-        >
-          <View style={tw`h-full w-full flex-row justify-center items-center`}>
+        <View style={tw`relative h-32`}>
+          <LineChart
+            style={tw`h-full rounded`}
+            svg={{
+              stroke: tw.color("green-200"),
+              strokeWidth: 1.6,
+            }}
+            contentInset={{ top: 15, bottom: 15 }}
+            data={chartData}
+            curve={curveNatural}
+          ></LineChart>
+
+          <View
+            style={tw`absolute inset-0 h-full w-full flex-row justify-center items-center`}
+          >
             <View style={tw`flex-row -mr-8 justify-center items-end`}>
               <StyledText size="5xl">
                 {hidingNumbers.isHiding ? "X" : history.today.sum.kcal}
@@ -59,7 +58,7 @@ export function HomeScreen() {
               </StyledText>
             </View>
           </View>
-        </LineChart>
+        </View>
 
         <View style={[tw`p-6 pt-0 flex-row justify-start flex-wrap`]}>
           {enabledValuesWithoutKcal.map((value, i) => {
