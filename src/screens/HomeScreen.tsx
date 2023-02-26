@@ -87,7 +87,7 @@ export function HomeScreen() {
         </View>
       </View>
 
-      <View style={tw`p-4 bg-gray-150 flex-1`}>
+      <View style={tw`p-4 bg-gray-200 flex-1`}>
         {history.today.entries.length === 0 ? (
           <View style={tw`flex-1 mb-20 justify-center items-center`}>
             <StyledText size="lg">Go, count some calories :)</StyledText>
