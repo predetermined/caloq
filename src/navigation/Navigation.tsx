@@ -67,7 +67,6 @@ function BottomTabNavigator() {
       screenOptions={{ headerShown: false, tabBarHideOnKeyboard: true }}
       tabBar={({ navigation, state }) => {
         const activeRouteName = state.routes[state.index].name;
-        const isRouteWithHangingWrapper = ["History"].includes(activeRouteName);
         const iconColor = tw.color("white");
 
         return (
@@ -79,11 +78,7 @@ function BottomTabNavigator() {
 
             <StatusBar
               barStyle="dark-content"
-              backgroundColor={
-                isRouteWithHangingWrapper && !isAddEntryFormOpen
-                  ? tw.color("gray-100")
-                  : "white"
-              }
+              backgroundColor={tw.color("white")}
             />
 
             <View
