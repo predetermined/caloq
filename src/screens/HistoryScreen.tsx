@@ -248,15 +248,9 @@ export function HistoryScreen() {
                     </StyledText>
 
                     <View style={tw`-mx-4`}>
-                      {entries.map((entry, i) => {
+                      {entries.map((entry) => {
                         return (
-                          <HistoryEntry
-                            key={entry.dateIso}
-                            entry={entry}
-                            style={tw`${
-                              i === entries.length - 1 ? "border-b" : ""
-                            }`}
-                          />
+                          <HistoryEntry key={entry.dateIso} entry={entry} />
                         );
                       })}
                     </View>

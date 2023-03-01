@@ -100,9 +100,6 @@ export function HomeScreen() {
                     style={[
                       tw`border-gray-300`,
                       tw`${i === 0 ? "border-t-0" : ""}`,
-                      tw`${
-                        i === history.today.entries.length - 1 ? "border-b" : ""
-                      }`,
                     ]}
                     key={entry.dateIso}
                     entry={entry}

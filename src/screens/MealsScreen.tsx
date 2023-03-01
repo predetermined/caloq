@@ -143,11 +143,6 @@ export function MealsScreen() {
                         </StyledText>
                       </Pressable>
                     }
-                    style={tw`${
-                      i === Object.keys(meals.entries).length - 1
-                        ? "border-b"
-                        : ""
-                    }`}
                   />
                 );
               })}
