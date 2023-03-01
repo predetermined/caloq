@@ -60,7 +60,7 @@ export function HomeScreen() {
           </View>
         </View>
 
-        <View style={[tw`p-6 pt-0 flex-row justify-start flex-wrap`]}>
+        <View style={[tw`p-4 pt-0 flex-row justify-start flex-wrap`]}>
           {enabledValuesWithoutKcal.map((value, i) => {
             return (
               <View
@@ -86,18 +86,24 @@ export function HomeScreen() {
         </View>
       </View>
 
-      <View style={tw`p-4 bg-gray-200 flex-1`}>
+      <View style={tw`bg-gray-100 flex-1`}>
         {history.today.entries.length === 0 ? (
           <View style={tw`flex-1 mb-20 justify-center items-center`}>
             <StyledText size="lg">Go, count some calories :)</StyledText>
           </View>
         ) : (
           <ScrollView style={[tw`pt-0`]}>
-            <View style={tw`-mt-4 mb-20`}>
-              {history.today.entries.map((entry) => {
+            <View style={tw`mb-24`}>
+              {history.today.entries.map((entry, i) => {
                 return (
                   <HistoryEntry
-                    style={tw`bg-white`}
+                    style={[
+                      tw`border-gray-300`,
+                      tw`${i === 0 ? "border-t-0" : ""}`,
+                      tw`${
+                        i === history.today.entries.length - 1 ? "border-b" : ""
+                      }`,
+                    ]}
                     key={entry.dateIso}
                     entry={entry}
                   />

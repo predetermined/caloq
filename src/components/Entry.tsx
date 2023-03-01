@@ -8,7 +8,7 @@ export function Entry({
   style,
 }: PropsWithChildren<{ style?: StyleProp<ViewStyle> }>) {
   return (
-    <View style={[tw`rounded p-4 mt-4 bg-gray-200`, style]}>{children}</View>
+    <View style={[tw`p-4 border-t border-gray-200`, style]}>{children}</View>
   );
 }
 
@@ -23,7 +23,7 @@ export function DefaultEntry({
   content: string;
   actions?: ReactNode;
   prefix?: ReactNode;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
 }) {
   return (
     <Entry style={[tw`flex-row items-end`, style]}>

@@ -2,7 +2,6 @@ import { curveNatural } from "d3-shape";
 import { useContext, useMemo, useRef, useState } from "react";
 import { Dimensions, ScrollView, View } from "react-native";
 import { Grid, LineChart, XAxis, YAxis } from "react-native-svg-charts";
-import { HangingWrapper } from "../components/HangingWrapper";
 import { HistoryEntry } from "../components/HistoryEntry";
 import { StyledText } from "../components/StyledText";
 import { DEFAULT_FONT_FAMILY } from "../constants/layout";
@@ -97,105 +96,110 @@ export function HistoryScreen() {
           setAmountOfLoadedDays(amountOfLoadedDays + 3);
         }}
       >
-        <HangingWrapper>
-          <View style={tw`flex-row justify-center  items-center`}>
-            <View style={tw`mr-4`}>
-              <StyledText
-                size="xs"
-                style={[
-                  tw`text-center mb-1 text-gray-600`,
-                  { fontFamily: "Azeret-Mono-Italic" },
-                ]}
-              >
-                Last 7 days avg.
-              </StyledText>
-              <StyledText style={tw`text-center`} size="md">
-                {hidingNumbers.isHiding ? "X" : Math.round(last7Days.avg.kcal)}{" "}
-                kcal
-              </StyledText>
-            </View>
-
-            <View>
-              <StyledText
-                size="xs"
-                style={[
-                  tw`text-center mb-1 text-gray-600`,
-                  { fontFamily: "Azeret-Mono-Italic" },
-                ]}
-              >
-                Last 30 days avg.
-              </StyledText>
-              <StyledText style={tw`text-center`} size="md">
-                {hidingNumbers.isHiding ? "X" : Math.round(last30Days.avg.kcal)}{" "}
-                kcal
-              </StyledText>
-            </View>
-          </View>
-
-          {chartData.sums.length >= 7 ? (
-            <View
-              style={{
-                padding: 20,
-                // height + padding * 2 + XAxis font size * XAxis line height + Xaxis top padding
-                height: 150 + 20 * 2 + 11 * 1.4 + 10,
-              }}
-            >
-              <View
-                style={{
-                  flexDirection: "row",
-                  height: 150,
-                }}
-              >
-                <YAxis
-                  data={chartData.sums}
-                  svg={{
-                    fill: tw.color("gray-600"),
-                    fontSize: 11,
-                    fontFamily: DEFAULT_FONT_FAMILY,
-                  }}
-                  contentInset={{ top: 5, bottom: 5 }}
-                  numberOfTicks={4}
-                />
-
-                <LineChart
-                  style={tw`w-full h-full pr-4 pl-2`}
-                  contentInset={{ top: 5, left: 10, bottom: 5 }}
-                  data={chartData.sums}
-                  svg={{ stroke: tw.color("gray-800"), strokeWidth: 1 }}
-                  curve={curveNatural}
+        <View style={tw`mt-4 p-4 pt-0 mb-20`}>
+          <View style={tw`mb-6`}>
+            <View style={tw`flex-row justify-center  items-center`}>
+              <View style={tw`mr-4`}>
+                <StyledText
+                  size="xs"
+                  style={[
+                    tw`text-center mb-1 text-gray-600`,
+                    { fontFamily: "Azeret-Mono-Italic" },
+                  ]}
                 >
-                  <Grid
-                    svg={{
-                      stroke: tw.color("gray-300"),
-                    }}
-                  />
-                </LineChart>
+                  Last 7 days avg.
+                </StyledText>
+                <StyledText style={tw`text-center`} size="md">
+                  {hidingNumbers.isHiding
+                    ? "X"
+                    : Math.round(last7Days.avg.kcal)}{" "}
+                  kcal
+                </StyledText>
               </View>
 
-              <XAxis
-                data={chartData.sums}
-                formatLabel={(value, i) => {
-                  if (chartData.sums.length >= 12) {
-                    if (i % 5 !== 0) return "";
-                  } else if (chartData.sums.length >= 7) {
-                    if (i % 2 !== 0) return "";
-                  }
-
-                  return chartData.dates[value].slice(0, -3);
-                }}
-                contentInset={{ left: 45, right: 15 }}
-                svg={{
-                  fontSize: 11,
-                  fill: tw.color("gray-600"),
-                  fontFamily: DEFAULT_FONT_FAMILY,
-                }}
-                style={tw`pt-2`}
-              />
+              <View>
+                <StyledText
+                  size="xs"
+                  style={[
+                    tw`text-center mb-1 text-gray-600`,
+                    { fontFamily: "Azeret-Mono-Italic" },
+                  ]}
+                >
+                  Last 30 days avg.
+                </StyledText>
+                <StyledText style={tw`text-center`} size="md">
+                  {hidingNumbers.isHiding
+                    ? "X"
+                    : Math.round(last30Days.avg.kcal)}{" "}
+                  kcal
+                </StyledText>
+              </View>
             </View>
-          ) : null}
-        </HangingWrapper>
 
-        <View style={tw`mt-4 p-4 pt-0 mb-20`}>
+            {chartData.sums.length >= 7 ? (
+              <View
+                style={{
+                  padding: 20,
+                  // height + padding * 2 + XAxis font size * XAxis line height + Xaxis top padding
+                  height: 150 + 20 * 2 + 11 * 1.4 + 10,
+                  marginBottom: -20,
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    height: 150,
+                  }}
+                >
+                  <YAxis
+                    data={chartData.sums}
+                    svg={{
+                      fill: tw.color("gray-600"),
+                      fontSize: 11,
+                      fontFamily: DEFAULT_FONT_FAMILY,
+                    }}
+                    contentInset={{ top: 5, bottom: 5 }}
+                    numberOfTicks={4}
+                  />
+
+                  <LineChart
+                    style={tw`w-full h-full pr-4 pl-2`}
+                    contentInset={{ top: 5, left: 10, bottom: 5 }}
+                    data={chartData.sums}
+                    svg={{ stroke: tw.color("gray-700"), strokeWidth: 1 }}
+                    curve={curveNatural}
+                  >
+                    <Grid
+                      svg={{
+                        stroke: tw.color("gray-300"),
+                      }}
+                    />
+                  </LineChart>
+                </View>
+
+                <XAxis
+                  data={chartData.sums}
+                  formatLabel={(value, i) => {
+                    if (chartData.sums.length >= 12) {
+                      if (i % 5 !== 0) return "";
+                    } else if (chartData.sums.length >= 7) {
+                      if (i % 2 !== 0) return "";
+                    }
+
+                    return chartData.dates[value].slice(0, -3);
+                  }}
+                  contentInset={{ left: 45, right: 15 }}
+                  svg={{
+                    fontSize: 11,
+                    fill: tw.color("gray-600"),
+                    fontFamily: DEFAULT_FONT_FAMILY,
+                  }}
+                  style={tw`pt-2`}
+                />
+              </View>
+            ) : null}
+          </View>
+
           {history.entries.length === 0 ? (
             <StyledText style={tw`text-center`}>
               Nothing here yet. Start counting! :)
@@ -212,18 +216,22 @@ export function HistoryScreen() {
                 return (
                   <View key={date}>
                     <StyledText
-                      size="lg"
-                      style={tw`mb-1 ${i !== 0 ? "mt-4" : ""}`}
+                      size="xl"
+                      style={[tw`${i !== 0 ? "mt-6" : ""}`]}
                     >
                       {date}
                     </StyledText>
 
-                    <StyledText size="xs" style={tw`flex-row mb-1`}>
+                    <StyledText style={tw`flex-row mb-2`}>
                       {nutrionalValuePreferences.enabledValues.map((key, i) => {
                         return (
-                          <StyledText key={key}>
+                          <StyledText
+                            size="xs"
+                            style={tw`text-gray-600`}
+                            key={key}
+                          >
                             {i === 0 ? null : " • "}
-                            <StyledText>
+                            <StyledText size="xs" style={tw`text-gray-600`}>
                               {hidingNumbers.isHiding ? "X" : sum[key]}
                               {
                                 NUTRIONAL_METRICS[key].representation
@@ -239,15 +247,19 @@ export function HistoryScreen() {
                       })}
                     </StyledText>
 
-                    {entries.map((entry, i) => {
-                      return (
-                        <HistoryEntry
-                          key={entry.dateIso}
-                          entry={entry}
-                          style={tw`${i !== 0 ? "mt-4" : ""}`}
-                        />
-                      );
-                    })}
+                    <View style={tw`-mx-4`}>
+                      {entries.map((entry, i) => {
+                        return (
+                          <HistoryEntry
+                            key={entry.dateIso}
+                            entry={entry}
+                            style={tw`${
+                              i === entries.length - 1 ? "border-b" : ""
+                            }`}
+                          />
+                        );
+                      })}
+                    </View>
                   </View>
                 );
               })}

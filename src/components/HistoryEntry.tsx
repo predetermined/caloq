@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Pressable, ViewStyle } from "react-native";
+import { Pressable, StyleProp, ViewStyle } from "react-native";
 import { AppContext } from "../contexts/appContext";
 import { HistoryEntry as IHistoryEntry } from "../hooks/useHistory";
 import { NUTRIONAL_METRICS } from "../hooks/useNutrionalValuePreferences";
@@ -12,7 +12,7 @@ export function HistoryEntry({
   style,
 }: {
   entry: IHistoryEntry;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
 }) {
   const { history, nutrionalValuePreferences, hidingNumbers } =
     useContext(AppContext);

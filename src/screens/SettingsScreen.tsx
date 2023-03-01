@@ -40,7 +40,7 @@ function Checkbox(props: {
       style={props.style}
       bounceEffectIn={0.9}
       fillColor={tw.color(`gray-800`)}
-      unfillColor={tw.color(`bg-gray-300`)}
+      unfillColor={tw.color(`bg-gray-200`)}
       iconStyle={tw`rounded`}
       text={props.text}
       isChecked={props.isChecked}

@@ -52,7 +52,7 @@ export function MealsScreen() {
         style={tw`bg-white`}
       >
         <View style={tw`p-4`}>
-          <View style={tw`p-4 bg-gray-100 rounded`}>
+          <View style={tw`mb-6`}>
             <View>
               <Label>Name</Label>
               <StyledTextInput
@@ -86,57 +86,72 @@ export function MealsScreen() {
             </Button>
           </View>
 
-          <View style={tw`mb-20`}>
-            {Object.keys(meals.entries).map((mealKey, i) => {
-              const meal = meals.entries[mealKey];
+          <View>
+            <StyledText size="xl" style={tw``}>
+              Meals
+            </StyledText>
 
-              const content = nutrionalValuePreferences.enabledValues.reduce(
-                (content, key, i) => {
-                  return (
-                    content +
-                    (i === 0 ? "" : "\n") +
-                    (meal[key] ?? "0") +
-                    NUTRIONAL_METRICS[key].representation.valueRelated.unit +
-                    " " +
-                    NUTRIONAL_METRICS[key].representation.valueRelated.suffix
-                  );
-                },
-                ""
-              );
+            <StyledText size="xs" style={tw`text-gray-600 mb-2`}>
+              {Object.keys(meals.entries).length} meals added so far
+            </StyledText>
 
-              return (
-                <DefaultEntry
-                  key={mealKey}
-                  title={mealKey}
-                  content={content}
-                  prefix={
-                    <View style={tw`flex-1 justify-center`}>
-                      <Button
-                        disabled={i === 0}
-                        onPress={() => moveUpInOrder(mealKey)}
-                        style={tw`${
-                          i === 0 ? "opacity-50" : ""
-                        } p-2 rounded-b-full rounded-t-full bg-gray-800 mr-4 h-10 w-10 items-center justify-center`}
+            <View style={tw`mb-20 -mx-4`}>
+              {Object.keys(meals.entries).map((mealKey, i) => {
+                const meal = meals.entries[mealKey];
+
+                const content = nutrionalValuePreferences.enabledValues.reduce(
+                  (content, key, i) => {
+                    return (
+                      content +
+                      (i === 0 ? "" : "\n") +
+                      (meal[key] ?? "0") +
+                      NUTRIONAL_METRICS[key].representation.valueRelated.unit +
+                      " " +
+                      NUTRIONAL_METRICS[key].representation.valueRelated.suffix
+                    );
+                  },
+                  ""
+                );
+
+                return (
+                  <DefaultEntry
+                    key={mealKey}
+                    title={mealKey}
+                    content={content}
+                    prefix={
+                      <View style={tw`flex-1 justify-center`}>
+                        <Button
+                          disabled={i === 0}
+                          onPress={() => moveUpInOrder(mealKey)}
+                          style={tw`${
+                            i === 0 ? "opacity-50" : ""
+                          } p-2 rounded-b-full rounded-t-full bg-gray-800 mr-4 h-10 w-10 items-center justify-center`}
+                        >
+                          <Ionicons size={18} name="chevron-up" color="white" />
+                        </Button>
+                      </View>
+                    }
+                    actions={
+                      <Pressable
+                        style={tw`p-2 rounded bg-gray-800`}
+                        onPress={async () => {
+                          await meals.remove(mealKey);
+                        }}
                       >
-                        <Ionicons size={18} name="chevron-up" color="white" />
-                      </Button>
-                    </View>
-                  }
-                  actions={
-                    <Pressable
-                      style={tw`p-2 rounded bg-gray-800`}
-                      onPress={async () => {
-                        await meals.remove(mealKey);
-                      }}
-                    >
-                      <StyledText style={tw`text-white`} size="sm">
-                        Delete
-                      </StyledText>
-                    </Pressable>
-                  }
-                />
-              );
-            })}
+                        <StyledText style={tw`text-white`} size="sm">
+                          Delete
+                        </StyledText>
+                      </Pressable>
+                    }
+                    style={tw`${
+                      i === Object.keys(meals.entries).length - 1
+                        ? "border-b"
+                        : ""
+                    }`}
+                  />
+                );
+              })}
+            </View>
           </View>
         </View>
       </ScrollView>

@@ -236,7 +236,7 @@ function FinalWeightInputForm(props: FinalInputFormCommonProps) {
               value={dropdownValue}
               setValue={(cb) => selectMeal(cb(dropdownValue))}
               style={[
-                tw`rounded bg-gray-300 text-black z-20`,
+                tw`rounded bg-gray-200 text-black z-20`,
                 { borderWidth: 0 },
               ]}
               textStyle={tw`text-black`}
