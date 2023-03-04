@@ -115,10 +115,7 @@ function InputTypeSelector(props: {
 function FinalInputFormButtons(props: { onSubmit(): void }) {
   return (
     <View style={tw`flex-row mt-4`}>
-      <Button
-        style={tw`bg-gray-800 flex-1 ml-2`}
-        onPress={() => props.onSubmit()}
-      >
+      <Button style={tw`bg-gray-800 flex-1`} onPress={() => props.onSubmit()}>
         Add
       </Button>
     </View>
