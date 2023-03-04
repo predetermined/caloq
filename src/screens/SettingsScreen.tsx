@@ -164,7 +164,7 @@ export function SettingsScreen() {
         style={tw`bg-white p-4`}
       >
         <View>
-          <StyledText size="lg" style={tw`mb-3`}>
+          <StyledText size="lg" style={tw`mb-2`}>
             Nutrional values{"\n"}to display
           </StyledText>
 
@@ -191,8 +191,8 @@ export function SettingsScreen() {
           })}
         </View>
 
-        <View style={tw`mt-4`}>
-          <StyledText size="lg" style={tw`mb-3`}>
+        <View style={tw`mt-6`}>
+          <StyledText size="lg" style={tw`mb-2`}>
             Visibility
           </StyledText>
 
@@ -205,8 +205,8 @@ export function SettingsScreen() {
           />
         </View>
 
-        <View style={tw`mt-4 mb-20`}>
-          <StyledText size="lg" style={tw`mb-3`}>
+        <View style={tw`mt-6 mb-20`}>
+          <StyledText size="lg" style={tw`mb-2`}>
             Data
           </StyledText>
 
