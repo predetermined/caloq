@@ -140,6 +140,7 @@ export function HistoryScreen() {
               <View
                 style={{
                   padding: 20,
+                  paddingLeft: 0,
                   // height + padding * 2 + XAxis font size * XAxis line height + Xaxis top padding
                   height: 150 + 20 * 2 + 11 * 1.4 + 10,
                   marginBottom: -20,
