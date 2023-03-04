@@ -138,7 +138,7 @@ export function MealsScreen() {
                           await meals.remove(mealKey);
                         }}
                       >
-                        <StyledText style={tw`text-white`} size="sm">
+                        <StyledText style={tw`text-white`} size="xs">
                           Delete
                         </StyledText>
                       </Pressable>

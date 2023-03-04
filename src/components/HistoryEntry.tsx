@@ -46,7 +46,7 @@ export function HistoryEntry({
             foreground: true,
           }}
         >
-          <StyledText size="sm" style={tw`text-white`}>
+          <StyledText size="xs" style={tw`text-white`}>
             Delete
           </StyledText>
         </Pressable>
