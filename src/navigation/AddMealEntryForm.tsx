@@ -241,7 +241,7 @@ function FinalWeightInputForm(props: FinalInputFormCommonProps) {
               ]}
               textStyle={tw`text-black`}
               dropDownContainerStyle={[
-                tw`z-10 bg-gray-300`,
+                tw`z-10 bg-gray-200`,
                 { borderWidth: 0 },
               ]}
               dropDownDirection="BOTTOM"
