@@ -97,7 +97,7 @@ function InputTypeSelector(props: {
         </Button>
 
         <View style={tw`flex-row justify-center bg-gray-800`}>
-          <View style={tw`h-0 border-b-2 border-gray-700 w-1/3`} />
+          <View style={tw`h-0 border-b-2 border-gray-600 w-1/3`} />
         </View>
 
         <Button
