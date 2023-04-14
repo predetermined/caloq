@@ -264,7 +264,7 @@ function FinalWeightInputForm(props: FinalInputFormCommonProps) {
                   fontFamily: DEFAULT_FONT_FAMILY,
                 },
               ]}
-              maxHeight={400}
+              maxHeight={240}
             />
           </View>
 
