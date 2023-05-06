@@ -22,6 +22,7 @@ import {
   NUTRIONAL_METRICS,
   OptionKey,
 } from "../hooks/useNutrionalValuePreferences";
+import { getDateString } from "../lib/getDateString";
 import { tw } from "../lib/tw";
 
 enum InputType {
@@ -416,7 +417,7 @@ export function AddMealEntryForm(props: { isOpen: boolean; onClose(): void }) {
     await history.add({
       ...meal,
       dateIso: date.toISOString(),
-      dateReadable: date.toLocaleDateString(),
+      dateReadable: getDateString(date),
     });
     props.onClose();
   }

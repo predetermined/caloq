@@ -1,5 +1,6 @@
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import { useEffect, useMemo, useState } from "react";
+import { getDateString } from "../lib/getDateString";
 import { Meal } from "./useMeals";
 import {
   EMPTY_NUTRIONAL_VALUES_NUMBERS,
@@ -45,7 +46,7 @@ export function useHistory() {
   }
 
   const today = useMemo(() => {
-    const dateReadable = new Date().toLocaleDateString();
+    const dateReadable = getDateString(new Date());
     const historyToday = entries.filter(
       (entry) => entry.dateReadable === dateReadable
     );

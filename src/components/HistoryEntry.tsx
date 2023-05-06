@@ -3,6 +3,7 @@ import { Pressable, StyleProp, ViewStyle } from "react-native";
 import { AppContext } from "../contexts/appContext";
 import { HistoryEntry as IHistoryEntry } from "../hooks/useHistory";
 import { NUTRIONAL_METRICS } from "../hooks/useNutrionalValuePreferences";
+import { getDateString } from "../lib/getDateString";
 import { tw } from "../lib/tw";
 import { DefaultEntry } from "./Entry";
 import { StyledText } from "./StyledText";
@@ -33,7 +34,7 @@ export function HistoryEntry({
 
   return (
     <DefaultEntry
-      title={new Date(entry.dateIso).toLocaleTimeString()}
+      title={getDateString(new Date(entry.dateIso))}
       content={content}
       actions={
         <Pressable
