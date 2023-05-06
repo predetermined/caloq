@@ -1,4 +1,3 @@
-import { registerRootComponent } from "expo";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { AppContext } from "./contexts/appContext";
 import useCachedResources from "./hooks/useCachedResources";
@@ -36,5 +35,3 @@ export function App() {
     );
   }
 }
-
-export default registerRootComponent(App);
