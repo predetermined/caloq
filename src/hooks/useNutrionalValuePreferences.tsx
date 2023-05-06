@@ -1,5 +1,5 @@
+import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
-import { AsyncStorage } from "react-native";
 import { tw } from "../lib/tw";
 
 export const EMPTY_NUTRIONAL_VALUES_STRINGS: Record<OptionKey, string> = {
@@ -92,6 +92,9 @@ export const NUTRIONAL_METRICS = {
 export type OptionKey = keyof typeof NUTRIONAL_METRICS;
 
 export function useNutrionalValuePreferences() {
+  const nutrionalValuePreferencesStorage = useAsyncStorage(
+    "nutrionalValuePreferences"
+  );
   const [enabledValues, setEnabledValues] = useState<OptionKey[]>([
     "kcal",
     "protein",
@@ -100,9 +103,8 @@ export function useNutrionalValuePreferences() {
 
   async function loadState() {
     try {
-      const nutrionalValuePreferencesString = await AsyncStorage.getItem(
-        "nutrionalValuePreferences"
-      );
+      const nutrionalValuePreferencesString =
+        await nutrionalValuePreferencesStorage.getItem();
       if (!nutrionalValuePreferencesString) return;
 
       setEnabledValues(JSON.parse(nutrionalValuePreferencesString));
@@ -116,19 +118,13 @@ export function useNutrionalValuePreferences() {
   async function enable(key: OptionKey) {
     const newState = [...enabledValues.filter((_key) => _key !== key), key];
     setEnabledValues(newState);
-    await AsyncStorage.setItem(
-      "nutrionalValuePreferences",
-      JSON.stringify(newState)
-    );
+    await nutrionalValuePreferencesStorage.setItem(JSON.stringify(newState));
   }
 
   async function disable(key: OptionKey) {
     const newState = [...enabledValues].filter((_key) => _key !== key);
     setEnabledValues(newState);
-    await AsyncStorage.setItem(
-      "nutrionalValuePreferences",
-      JSON.stringify(newState)
-    );
+    await nutrionalValuePreferencesStorage.setItem(JSON.stringify(newState));
   }
 
   return {

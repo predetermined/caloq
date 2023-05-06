@@ -1,5 +1,5 @@
+import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
-import { AsyncStorage } from "react-native";
 import { OptionKey } from "./useNutrionalValuePreferences";
 
 export type Meal = Record<OptionKey, number>;
@@ -7,6 +7,7 @@ export type Meal = Record<OptionKey, number>;
 export type MealAsObject = { name: string } & Meal;
 
 export function useMeals() {
+  const mealsStorage = useAsyncStorage("meals");
   const [entries, setEntries] = useState<Record<string, Meal>>({
     Oatmeal: { kcal: 372, protein: 14, sugar: 1, fat: 7, fiber: 10, carbs: 59 },
   });
@@ -17,7 +18,7 @@ export function useMeals() {
 
   async function loadEntries() {
     try {
-      const mealsString = await AsyncStorage.getItem("meals");
+      const mealsString = await mealsStorage.getItem();
       if (!mealsString) return;
 
       setEntries(JSON.parse(mealsString));
@@ -27,8 +28,7 @@ export function useMeals() {
   async function add(meal: MealAsObject) {
     try {
       const { name, ...values } = meal;
-      await AsyncStorage.setItem(
-        "meals",
+      await mealsStorage.setItem(
         JSON.stringify({ ...entries, [name]: values })
       );
     } catch {}
@@ -44,7 +44,7 @@ export function useMeals() {
         insert[name] = values;
       }
 
-      await AsyncStorage.setItem("meals", JSON.stringify(insert));
+      await mealsStorage.setItem(JSON.stringify(insert));
     } catch {}
     await loadEntries();
   }
@@ -57,7 +57,7 @@ export function useMeals() {
       newMeals[mealKey] = entries[mealKey];
     }
 
-    await AsyncStorage.setItem("meals", JSON.stringify(newMeals));
+    await mealsStorage.setItem(JSON.stringify(newMeals));
     await loadEntries();
   }
 
@@ -73,7 +73,7 @@ export function useMeals() {
       newEntries[mealKey] = entries[mealKey];
     }
 
-    await AsyncStorage.setItem("meals", JSON.stringify(newEntries));
+    await mealsStorage.setItem(JSON.stringify(newEntries));
     await loadEntries();
   }
 

@@ -1,5 +1,5 @@
+import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import { useEffect, useMemo, useState } from "react";
-import { AsyncStorage } from "react-native";
 import { Meal } from "./useMeals";
 import {
   EMPTY_NUTRIONAL_VALUES_NUMBERS,
@@ -17,6 +17,7 @@ export function uniqifyEntry(entry: HistoryEntry) {
 }
 
 export function useHistory() {
+  const historyStorage = useAsyncStorage("history");
   // Sorted ASC by date
   const [entries, setEntries] = useState<HistoryEntry[]>([]);
 
@@ -26,7 +27,7 @@ export function useHistory() {
 
   async function loadEntries() {
     try {
-      const historyString = await AsyncStorage.getItem("history");
+      const historyString = await historyStorage.getItem();
       if (!historyString) return;
 
       const newHistory = JSON.parse(historyString) as HistoryEntry[];
@@ -71,20 +72,14 @@ export function useHistory() {
 
   async function add(entry: HistoryEntry) {
     try {
-      await AsyncStorage.setItem(
-        "history",
-        JSON.stringify([...entries, entry])
-      );
+      await historyStorage.setItem(JSON.stringify([...entries, entry]));
     } catch {}
     await loadEntries();
   }
 
   async function addMany(newEntries: HistoryEntry[]) {
     try {
-      await AsyncStorage.setItem(
-        "history",
-        JSON.stringify([...entries, ...newEntries])
-      );
+      await historyStorage.setItem(JSON.stringify([...entries, ...newEntries]));
     } catch {}
     await loadEntries();
   }
@@ -97,7 +92,7 @@ export function useHistory() {
       newEntries.push(entry);
     }
 
-    await AsyncStorage.setItem("history", JSON.stringify(newEntries));
+    await historyStorage.setItem(JSON.stringify(newEntries));
     await loadEntries();
   }
 
@@ -120,9 +115,9 @@ export function useHistory() {
       { ...EMPTY_NUTRIONAL_VALUES_NUMBERS }
     );
 
-    const uniqueDates = [
-      ...new Set(entriesWithinTimeFrame.map((entry) => entry.dateReadable)),
-    ];
+    const uniqueDates = Array.from(
+      new Set(entriesWithinTimeFrame.map((entry) => entry.dateReadable))
+    );
 
     const avg = Object.entries(sum).reduce(
       (avg, [key, value]) => {

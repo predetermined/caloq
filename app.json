@@ -1,6 +1,5 @@
 {
   "expo": {
-    "entryPoint": "./src/App.tsx",
     "name": "caloq",
     "owner": "l5d",
     "slug": "caloq",

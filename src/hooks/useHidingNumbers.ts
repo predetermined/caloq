@@ -1,11 +1,12 @@
+import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
-import { AsyncStorage } from "react-native";
 
 export function useHidingNumbers() {
+  const isHidingNumbersStorage = useAsyncStorage("isHidingNumbers");
   const [isHiding, setIsHiding] = useState(false);
 
   async function loadState() {
-    setIsHiding(!!(await AsyncStorage.getItem("isHidingNumbers")));
+    setIsHiding(!!(await isHidingNumbersStorage.getItem()));
   }
 
   useEffect(() => {
@@ -14,9 +15,9 @@ export function useHidingNumbers() {
 
   async function toggle() {
     if (isHiding) {
-      AsyncStorage.removeItem("isHidingNumbers");
+      isHidingNumbersStorage.removeItem();
     } else {
-      AsyncStorage.setItem("isHidingNumbers", "1");
+      isHidingNumbersStorage.setItem("1");
     }
 
     await loadState();
