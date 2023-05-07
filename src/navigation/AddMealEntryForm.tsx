@@ -8,7 +8,7 @@ import {
   useState,
 } from "react";
 import { Animated, Keyboard, Pressable, View } from "react-native";
-import DropDownPicker from "react-native-dropdown-picker";
+import { Dropdown } from "react-native-element-dropdown";
 import { Button } from "../components/Button";
 import { Label } from "../components/Label";
 import { StyledText } from "../components/StyledText";
@@ -170,14 +170,12 @@ function FinalWeightInputForm(props: FinalInputFormCommonProps) {
   >(EMPTY_NUTRIONAL_VALUES_STRINGS);
   const [grams, setGrams] = useState("");
   const { nutrionalValuePreferences, meals } = useContext(AppContext);
-  const [dropdownValue, setDropdownValue] = useState<
-    string | "MANUALLY" | null
-  >(null);
+  const [dropdownValue, setDropdownValue] = useState<string | "MANUALLY">(
+    "MANUALLY"
+  );
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  function selectMeal(
-    mealKey: keyof typeof NUTRIONAL_METRICS | "MANUALLY" | null
-  ) {
+  function selectMeal(mealKey: string | "MANUALLY") {
     setDropdownValue(mealKey);
 
     if (!mealKey || mealKey === "MANUALLY") {
@@ -222,50 +220,22 @@ function FinalWeightInputForm(props: FinalInputFormCommonProps) {
         />
       </View>
 
-      <View style={tw`mt-4`}>
+      <View style={tw`mt-4 z-10`}>
         <Label>Nutrional values per 100g</Label>
 
         <View style={tw`rounded`}>
-          <View style={tw``}>
-            <DropDownPicker
-              open={isDropdownOpen}
-              setOpen={setIsDropdownOpen}
-              items={dropdownItems}
+          <View style={tw`z-50`}>
+            <Dropdown
+              data={dropdownItems}
+              labelField="label"
+              valueField="value"
+              onChange={({ value }) => selectMeal(value)}
               value={dropdownValue}
-              setValue={(cb) => selectMeal(cb(dropdownValue))}
-              style={[
-                tw`rounded bg-gray-200 text-black z-20`,
-                { borderWidth: 0 },
-              ]}
-              textStyle={tw`text-black`}
-              dropDownContainerStyle={[
-                tw`z-10 bg-gray-200`,
-                { borderWidth: 0 },
-              ]}
-              dropDownDirection="BOTTOM"
-              placeholder="Choose meal..."
-              flatListProps={{ keyboardShouldPersistTaps: "handled" }}
-              listMode="FLATLIST"
-              labelStyle={[
-                {
-                  fontSize: DEFAULT_FONT_SIZE,
-                  fontFamily: DEFAULT_FONT_FAMILY,
-                },
-              ]}
-              placeholderStyle={[
-                {
-                  fontSize: DEFAULT_FONT_SIZE,
-                  fontFamily: DEFAULT_FONT_FAMILY,
-                },
-                tw`text-gray-600`,
-              ]}
-              listItemLabelStyle={[
-                {
-                  fontSize: DEFAULT_FONT_SIZE,
-                  fontFamily: DEFAULT_FONT_FAMILY,
-                },
-              ]}
-              maxHeight={240}
+              style={tw`py-2 px-4 rounded bg-gray-200`}
+              fontFamily={DEFAULT_FONT_FAMILY}
+              containerStyle={tw`rounded shadow-none bg-gray-200`}
+              itemTextStyle={{ fontSize: DEFAULT_FONT_SIZE }}
+              selectedTextStyle={{ fontSize: DEFAULT_FONT_SIZE }}
             />
           </View>
 
