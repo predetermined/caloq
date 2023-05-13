@@ -41,7 +41,9 @@ function Checkbox(props: {
       bounceEffectIn={0.9}
       fillColor={tw.color(`gray-800`)}
       unfillColor={tw.color(`bg-gray-200`)}
-      iconStyle={tw`rounded`}
+      iconStyle={tw`rounded border ${
+        props.isChecked ? "border-gray-900" : "border-gray-300"
+      }`}
       text={props.text}
       isChecked={props.isChecked}
       onPress={props.onPress}

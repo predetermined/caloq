@@ -231,11 +231,21 @@ function FinalWeightInputForm(props: FinalInputFormCommonProps) {
               valueField="value"
               onChange={({ value }) => selectMeal(value)}
               value={dropdownValue}
-              style={tw`py-2 px-4 rounded bg-gray-200`}
+              style={tw`py-2 px-4 rounded bg-gray-200 border border-gray-300`}
               fontFamily={DEFAULT_FONT_FAMILY}
-              containerStyle={tw`rounded shadow-none bg-gray-200`}
-              itemTextStyle={{ fontSize: DEFAULT_FONT_SIZE }}
-              selectedTextStyle={{ fontSize: DEFAULT_FONT_SIZE }}
+              containerStyle={tw`mt-1 rounded shadow-none bg-gray-200 border border-gray-300`}
+              itemTextStyle={{
+                fontSize: DEFAULT_FONT_SIZE,
+              }}
+              selectedTextStyle={{
+                fontSize: DEFAULT_FONT_SIZE,
+              }}
+              autoScroll={false}
+              renderItem={(item, isSelected) => (
+                <View style={tw`py-3 px-4 ${isSelected ? "bg-gray-300" : ""}`}>
+                  <StyledText>{item.label}</StyledText>
+                </View>
+              )}
             />
           </View>
 
