@@ -4,20 +4,20 @@ import { tw } from "../lib/tw";
 
 export const EMPTY_NUTRIONAL_VALUES_STRINGS: Record<OptionKey, string> = {
   kcal: "",
-  protein: "",
-  sugar: "",
   fat: "",
-  fiber: "",
   carbs: "",
+  fiber: "",
+  sugar: "",
+  protein: "",
 } as const;
 
 export const EMPTY_NUTRIONAL_VALUES_NUMBERS: Record<OptionKey, number> = {
   kcal: 0,
-  protein: 0,
-  sugar: 0,
   fat: 0,
-  fiber: 0,
   carbs: 0,
+  fiber: 0,
+  sugar: 0,
+  protein: 0,
 } as const;
 
 export const NUTRIONAL_METRICS = {
@@ -32,36 +32,14 @@ export const NUTRIONAL_METRICS = {
       },
     },
   },
-  protein: {
-    label: "Grams of protein",
-    representation: {
-      color: tw.color("indigo-300"),
-      iconName: "barbell",
-      valueRelated: {
-        unit: "g",
-        suffix: "protein",
-      },
-    },
-  },
-  sugar: {
-    label: "Grams of sugar",
-    representation: {
-      color: tw.color("gray-800"),
-      iconName: "barbell",
-      valueRelated: {
-        unit: "g",
-        suffix: "sugar",
-      },
-    },
-  },
-  fiber: {
-    label: "Grams of fiber",
+  fat: {
+    label: "Grams of fat",
     representation: {
       color: tw.color("orange-400"),
       iconName: "barbell",
       valueRelated: {
         unit: "g",
-        suffix: "fiber",
+        suffix: "fat",
       },
     },
   },
@@ -76,14 +54,36 @@ export const NUTRIONAL_METRICS = {
       },
     },
   },
-  fat: {
-    label: "Grams of fat",
+  fiber: {
+    label: "Grams of fiber",
     representation: {
       color: tw.color("orange-400"),
       iconName: "barbell",
       valueRelated: {
         unit: "g",
-        suffix: "fat",
+        suffix: "fiber",
+      },
+    },
+  },
+  sugar: {
+    label: "Grams of sugar",
+    representation: {
+      color: tw.color("gray-800"),
+      iconName: "barbell",
+      valueRelated: {
+        unit: "g",
+        suffix: "sugar",
+      },
+    },
+  },
+  protein: {
+    label: "Grams of protein",
+    representation: {
+      color: tw.color("indigo-300"),
+      iconName: "barbell",
+      valueRelated: {
+        unit: "g",
+        suffix: "protein",
       },
     },
   },
@@ -97,8 +97,8 @@ export function useNutrionalValuePreferences() {
   );
   const [enabledValues, setEnabledValues] = useState<OptionKey[]>([
     "kcal",
-    "protein",
     "sugar",
+    "protein",
   ]);
 
   async function loadState() {
@@ -116,19 +116,29 @@ export function useNutrionalValuePreferences() {
   }, []);
 
   async function enable(key: OptionKey) {
-    const newState = [...enabledValues.filter((_key) => _key !== key), key];
+    const newState = [
+      ...enabledValues.filter((_key) => _key !== key),
+      key,
+    ].sort((a, b) =>
+      Object.keys(NUTRIONAL_METRICS).indexOf(a) <
+      Object.keys(NUTRIONAL_METRICS).indexOf(b)
+        ? -1
+        : 1
+    );
+
     setEnabledValues(newState);
     await nutrionalValuePreferencesStorage.setItem(JSON.stringify(newState));
   }
 
   async function disable(key: OptionKey) {
     const newState = [...enabledValues].filter((_key) => _key !== key);
+
     setEnabledValues(newState);
     await nutrionalValuePreferencesStorage.setItem(JSON.stringify(newState));
   }
 
   return {
-    enabledValues,
+    enabledValues: enabledValues,
     enable,
     disable,
   };
